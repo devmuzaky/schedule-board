@@ -121,6 +121,8 @@ import { AuthService } from '../../core/auth/auth.service';
       .sidebar-nav a.active {
         background: var(--app-accent);
         color: white;
+        font-weight: 600;
+        box-shadow: inset 3px 0 0 rgba(255, 255, 255, 0.4);
       }
       .sidebar-nav a i {
         font-size: 1.1rem;

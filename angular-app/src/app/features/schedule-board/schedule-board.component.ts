@@ -5,7 +5,6 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
-import { SelectButtonModule } from 'primeng/selectbutton';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
@@ -21,13 +20,13 @@ import {
 import { Task, Day, Aspect } from '../../shared/models/task.model';
 
 const DAYS: Day[] = [
+  'Saturday',
+  'Sunday',
   'Monday',
   'Tuesday',
   'Wednesday',
   'Thursday',
   'Friday',
-  'Saturday',
-  'Sunday',
 ];
 
 const ASPECTS: Aspect[] = [
@@ -48,7 +47,6 @@ const DAY_ORDER: Day[] = [
   'Friday',
   'Saturday',
 ];
-const VIEW_MODE_KEY = 'schedule-board-view-mode';
 const SELECTED_DAY_KEY = 'schedule-board-selected-day';
 
 function getTodayDay(): Day {
@@ -66,7 +64,6 @@ function getTodayDay(): Day {
     InputNumberModule,
     ButtonModule,
     TagModule,
-    SelectButtonModule,
     DialogModule,
     DropdownModule,
     InputTextModule,
@@ -83,13 +80,6 @@ function getTodayDay(): Day {
           icon="pi pi-plus"
           (click)="openAddDialog()"
         ></button>
-        <p-selectButton
-          [options]="viewOptions"
-          [(ngModel)]="viewMode"
-          (onChange)="onViewModeChange()"
-          optionLabel="label"
-          optionValue="value"
-        ></p-selectButton>
         <button
           pButton
           (click)="resetWeek()"
@@ -99,19 +89,17 @@ function getTodayDay(): Day {
       </div>
     </div>
 
-    @if (viewMode === 'all') {
-      <div class="day-tabs">
-        <button
-          *ngFor="let opt of dayTabOptions"
-          type="button"
-          class="day-tab"
-          [class.active]="selectedDay === opt.value"
-          (click)="selectedDay = opt.value; saveSelectedDay()"
-        >
-          {{ opt.label }}
-        </button>
-      </div>
-    }
+    <div class="day-tabs">
+      <button
+        *ngFor="let opt of dayTabOptions"
+        type="button"
+        class="day-tab"
+        [class.active]="selectedDay === opt.value"
+        (click)="selectedDay = opt.value; saveSelectedDay()"
+      >
+        {{ opt.label }}
+      </button>
+    </div>
 
     <section class="task-list-section">
       @if (filteredTasks.length === 0) {
@@ -603,26 +591,12 @@ export class ScheduleBoardComponent implements OnInit {
   adding = false;
   saving = false;
 
-  viewMode: 'all' | 'today' = 'all';
-  viewOptions = [
-    { label: 'All days', value: 'all' },
-    { label: 'Today only', value: 'today' },
-  ];
-  selectedDay: Day | 'All' = 'All';
-  dayTabOptions = [
-    { label: 'All', value: 'All' as const },
-    ...DAYS.map((d) => ({ label: d.slice(0, 3), value: d })),
-  ];
+  selectedDay: Day = getTodayDay();
+  dayTabOptions = DAYS.map((d) => ({ label: d.slice(0, 3), value: d }));
   dayOptions = DAYS.map((d) => ({ label: d, value: d }));
   aspectOptions = ASPECTS.map((a) => ({ label: a, value: a }));
 
   get filteredTasks(): Task[] {
-    if (this.viewMode === 'today') {
-      return this.tasks.filter((t) => t.day === getTodayDay());
-    }
-    if (this.selectedDay === 'All') {
-      return this.tasks;
-    }
     return this.tasks.filter((t) => t.day === this.selectedDay);
   }
 
@@ -645,15 +619,9 @@ export class ScheduleBoardComponent implements OnInit {
   });
 
   ngOnInit() {
-    const storedView = localStorage.getItem(VIEW_MODE_KEY) as
-      | 'all'
-      | 'today'
-      | null;
-    if (storedView === 'all' || storedView === 'today')
-      this.viewMode = storedView;
     const storedDay = localStorage.getItem(SELECTED_DAY_KEY);
-    if (storedDay === 'All' || DAYS.includes(storedDay as Day))
-      this.selectedDay = storedDay as Day | 'All';
+    if (storedDay && DAYS.includes(storedDay as Day))
+      this.selectedDay = storedDay as Day;
     this.taskService.loadTasks().subscribe();
     this.taskService.tasks.subscribe((t) => {
       this.tasks = t;
@@ -674,10 +642,6 @@ export class ScheduleBoardComponent implements OnInit {
   getProgressPercent(task: Task): number {
     if (task.plannedHours <= 0) return 0;
     return (task.studiedHours / task.plannedHours) * 100;
-  }
-
-  onViewModeChange() {
-    localStorage.setItem(VIEW_MODE_KEY, this.viewMode);
   }
 
   saveSelectedDay() {

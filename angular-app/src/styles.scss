@@ -8,8 +8,8 @@
   --app-text-secondary: #94a3b8;
   --app-column-bg: #1a2332;
   --app-nav-bg: #1a2332;
-  --app-accent: #60a5fa;
-  --app-accent-hover: #93c5fd;
+  --app-accent: #22d3ee;
+  --app-accent-hover: #67e8f9;
   --app-card-shadow:
     0 2px 8px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.2);
   --app-card-shadow-hover:
@@ -333,7 +333,8 @@ h6 {
   border-color: #dc2626 !important;
 }
 
-.p-confirm-dialog .p-confirm-dialog-accept.p-button-danger:hover:not(:disabled) {
+.p-confirm-dialog
+  .p-confirm-dialog-accept.p-button-danger:hover:not(:disabled) {
   background: #b91c1c !important;
   border-color: #b91c1c !important;
 }
@@ -359,6 +360,8 @@ h6 {
 
   .sidebar-nav a.active {
     color: white !important;
+    background: var(--app-accent) !important;
+    font-weight: 600 !important;
   }
 
   /* PrimeNG dark mode overrides */
@@ -437,16 +440,6 @@ h6 {
   }
   .p-dropdown-item:hover {
     background: var(--app-column-bg) !important;
-  }
-  .p-selectbutton .p-button {
-    background: var(--app-surface) !important;
-    border-color: var(--app-border) !important;
-    color: var(--app-text) !important;
-  }
-  .p-selectbutton .p-button.p-highlight {
-    background: var(--app-accent) !important;
-    border-color: var(--app-accent) !important;
-    color: white !important;
   }
   .p-dialog {
     background: var(--app-glass-bg) !important;

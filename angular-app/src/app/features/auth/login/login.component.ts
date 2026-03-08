@@ -73,12 +73,12 @@ import { AuthService } from '../../../core/auth/auth.service';
       }
       .login-card ::ng-deep .p-card {
         border-radius: 20px;
-        border: 1px solid rgba(96, 165, 250, 0.4);
-        box-shadow: var(--app-card-shadow-hover), 0 0 0 1px rgba(96, 165, 250, 0.1);
+        border: 1px solid rgba(34, 211, 238, 0.4);
+        box-shadow: var(--app-card-shadow-hover), 0 0 0 1px rgba(34, 211, 238, 0.1);
         overflow: hidden;
       }
       .login-card ::ng-deep .p-card:hover {
-        box-shadow: 0 20px 40px -10px rgba(96, 165, 250, 0.25);
+        box-shadow: 0 20px 40px -10px rgba(34, 211, 238, 0.25);
       }
       .card-header {
         text-align: center;
