@@ -118,11 +118,16 @@ import { AuthService } from '../../core/auth/auth.service';
       .sidebar-nav a:hover {
         background: var(--app-column-bg);
       }
+      .sidebar-nav a.active:hover {
+        background: var(--app-accent-bg);
+      }
       .sidebar-nav a.active {
-        background: var(--app-accent);
-        color: white;
+        background: var(--app-accent-bg);
+        color: var(--app-accent-text);
         font-weight: 600;
-        box-shadow: inset 3px 0 0 rgba(255, 255, 255, 0.4);
+        border-left: 3px solid var(--app-accent);
+        margin-left: -3px;
+        padding-left: calc(1rem + 3px);
       }
       .sidebar-nav a i {
         font-size: 1.1rem;

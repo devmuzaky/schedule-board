@@ -73,12 +73,12 @@ import { AuthService } from '../../../core/auth/auth.service';
       }
       .login-card ::ng-deep .p-card {
         border-radius: 20px;
-        border: 1px solid rgba(34, 211, 238, 0.4);
-        box-shadow: var(--app-card-shadow-hover), 0 0 0 1px rgba(34, 211, 238, 0.1);
+        border: 1px solid var(--app-accent);
+        box-shadow: var(--app-card-shadow-hover), 0 0 0 1px var(--app-accent-bg);
         overflow: hidden;
       }
       .login-card ::ng-deep .p-card:hover {
-        box-shadow: 0 20px 40px -10px rgba(34, 211, 238, 0.25);
+        box-shadow: 0 20px 40px -10px var(--app-accent-bg);
       }
       .card-header {
         text-align: center;
@@ -91,12 +91,13 @@ import { AuthService } from '../../../core/auth/auth.service';
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, var(--app-accent), var(--app-accent-hover));
+        background: var(--app-accent-bg);
+        border: 1px solid var(--app-accent);
         border-radius: 14px;
       }
       .logo-area i {
         font-size: 1.75rem;
-        color: white;
+        color: var(--app-accent-text);
       }
       .card-header h2 {
         margin: 0 0 0.35rem 0;

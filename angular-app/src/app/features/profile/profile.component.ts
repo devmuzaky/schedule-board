@@ -129,8 +129,9 @@ import { TaskService, ProgressLogResponse } from '../../shared/services/task.ser
         font-size: 0.8rem;
         padding: 0.2rem 0.5rem;
         border-radius: 6px;
-        background: var(--app-accent);
-        color: white;
+        background: var(--app-accent-bg);
+        border: 1px solid var(--app-accent);
+        color: var(--app-accent-text);
         flex-shrink: 0;
       }
       .log-task {

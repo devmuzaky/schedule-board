@@ -353,9 +353,9 @@ function getTodayDay(): Day {
         background: var(--app-column-bg);
       }
       .day-tab.active {
-        background: var(--app-accent);
+        background: var(--app-accent-bg);
         border-color: var(--app-accent);
-        color: white;
+        color: var(--app-accent-text);
       }
       .task-list-section {
         min-height: 200px;

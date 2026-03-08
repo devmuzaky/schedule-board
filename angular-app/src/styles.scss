@@ -8,8 +8,10 @@
   --app-text-secondary: #94a3b8;
   --app-column-bg: #1a2332;
   --app-nav-bg: #1a2332;
-  --app-accent: #22d3ee;
-  --app-accent-hover: #67e8f9;
+  --app-accent: #13505c;
+  --app-accent-hover: #1a6570;
+  --app-accent-bg: #0d94882e;
+  --app-accent-text: #0d9fbb;
   --app-card-shadow:
     0 2px 8px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.2);
   --app-card-shadow-hover:
@@ -285,7 +287,7 @@ h6 {
 }
 
 .p-confirm-dialog .p-confirm-dialog-icon {
-  color: var(--app-accent) !important;
+  color: var(--app-accent-text) !important;
   font-size: 1.5rem !important;
   flex-shrink: 0;
 }
@@ -359,9 +361,12 @@ h6 {
   }
 
   .sidebar-nav a.active {
-    color: white !important;
-    background: var(--app-accent) !important;
+    color: var(--app-accent-text) !important;
+    background: var(--app-accent-bg) !important;
     font-weight: 600 !important;
+  }
+  .sidebar-nav a.active:hover {
+    background: var(--app-accent-bg) !important;
   }
 
   /* PrimeNG dark mode overrides */
@@ -432,8 +437,8 @@ h6 {
     color: var(--app-text) !important;
   }
   .p-dropdown-panel .p-dropdown-item.p-highlight {
-    background: var(--app-accent) !important;
-    color: white !important;
+    background: var(--app-accent-bg) !important;
+    color: var(--app-accent-text) !important;
   }
   .p-dropdown-item {
     color: var(--app-text) !important;
@@ -472,7 +477,7 @@ h6 {
     border-color: rgba(255, 255, 255, 0.08) !important;
   }
   .p-confirm-dialog .p-confirm-dialog-icon {
-    color: var(--app-accent) !important;
+    color: var(--app-accent-text) !important;
   }
   .p-confirm-dialog .p-confirm-dialog-message {
     color: var(--app-text) !important;
@@ -595,65 +600,13 @@ input:active,
 }
 
 /* ===== Aspect tags (p-tag only) ===== */
-.p-tag.aspect-English {
-  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%) !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 0.35rem 0.75rem !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  font-size: 0.8rem !important;
-  box-shadow: 0 1px 3px rgba(25, 118, 210, 0.3) !important;
-}
-.p-tag.aspect-FE {
-  background: linear-gradient(135deg, #7b1fa2 0%, #6a1b9a 100%) !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 0.35rem 0.75rem !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  font-size: 0.8rem !important;
-  box-shadow: 0 1px 3px rgba(123, 31, 162, 0.3) !important;
-}
-.p-tag.aspect-BE {
-  background: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%) !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 0.35rem 0.75rem !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  font-size: 0.8rem !important;
-  box-shadow: 0 1px 3px rgba(56, 142, 60, 0.3) !important;
-}
-.p-tag.aspect-AI {
-  background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%) !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 0.35rem 0.75rem !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  font-size: 0.8rem !important;
-  box-shadow: 0 1px 3px rgba(245, 124, 0, 0.3) !important;
-}
-.p-tag.aspect-Soft_skills {
-  background: linear-gradient(135deg, #c2185b 0%, #ad1457 100%) !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 0.35rem 0.75rem !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  font-size: 0.8rem !important;
-  box-shadow: 0 1px 3px rgba(194, 24, 91, 0.3) !important;
-}
-.p-tag.aspect-Reading {
-  background: linear-gradient(135deg, #0097a7 0%, #00838f 100%) !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 0.35rem 0.75rem !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  font-size: 0.8rem !important;
-  box-shadow: 0 1px 3px rgba(0, 151, 167, 0.3) !important;
+.p-tag {
+  background: var(--app-accent) !important;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.4rem;
+  border-radius: 6px;
 }
 
 /* ===== Layout utilities ===== */

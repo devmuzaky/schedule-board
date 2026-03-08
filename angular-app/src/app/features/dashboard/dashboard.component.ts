@@ -111,7 +111,7 @@ const ASPECT_COLORS: Record<Aspect, string> = {
       .stat-value {
         font-size: 1.5rem;
         font-weight: 700;
-        color: var(--app-accent);
+        color: var(--app-accent-text);
       }
       .stat-label {
         font-size: 0.85rem;
