@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  email     String?
+  tasks     Task[]
+}
+
+enum Aspect {
+  English
+  FE
+  BE
+  AI
+  Soft_skills
+  Reading
+}
+
+enum Day {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+}
+
+model Task {
+  id           String       @id @default(cuid())
+  userId       String
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  aspect       Aspect
+  description  String
+  plannedHours Float
+  studiedHours Float       @default(0)
+  day          Day
+  progressLogs ProgressLog[]
+
+  @@index([userId])
+  @@index([userId, day])
+}
+
+model ProgressLog {
+  id          String   @id @default(cuid())
+  taskId      String
+  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  loggedHours Float
+  date        DateTime @default(now())
+
+  @@index([taskId])
+}

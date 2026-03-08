@@ -1,0 +1,446 @@
+/* ===== Global theme variables ===== */
+:root {
+  --app-bg: #f1f5f9;
+  --app-surface: #ffffff;
+  --app-surface-elevated: #ffffff;
+  --app-border: #cbd5e1;
+  --app-text: #0f172a;
+  --app-text-secondary: #475569;
+  --app-column-bg: #e2e8f0;
+  --app-nav-bg: #e2e8f0;
+  --app-accent: #3b82f6;
+  --app-accent-hover: #2563eb;
+  --app-card-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --app-card-shadow-hover:
+    0 12px 28px -8px rgba(15, 23, 42, 0.12),
+    0 4px 12px -4px rgba(15, 23, 42, 0.08);
+  --app-card-radius: 12px;
+  --app-card-border: 1px solid var(--app-border);
+  --app-font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --app-sidebar-width: 240px;
+}
+
+.dark-theme {
+  --app-bg: #0c1222;
+  --app-surface: #1a2332;
+  --app-surface-elevated: #243044;
+  --app-border: #334155;
+  --app-text: #f1f5f9;
+  --app-text-secondary: #94a3b8;
+  --app-column-bg: #1a2332;
+  --app-nav-bg: #1a2332;
+  --app-accent: #60a5fa;
+  --app-accent-hover: #93c5fd;
+  --app-card-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --app-card-shadow-hover:
+    0 12px 28px -8px rgba(0, 0, 0, 0.4), 0 4px 12px -4px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== Base ===== */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: var(--app-font-sans);
+  font-weight: 400;
+  line-height: 1.5;
+  background-color: var(--app-bg);
+  color: var(--app-text);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* ===== Typography ===== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 0.5em 0;
+  font-weight: 600;
+  color: var(--app-text);
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 1.75rem;
+}
+h2 {
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1.25rem;
+}
+h4 {
+  font-size: 1.1rem;
+}
+h5 {
+  font-size: 1rem;
+}
+h6 {
+  font-size: 0.95rem;
+}
+
+/* ===== Cards ===== */
+.p-card {
+  border-radius: var(--app-card-radius) !important;
+  border: var(--app-card-border) !important;
+  box-shadow: var(--app-card-shadow) !important;
+  background: var(--app-surface) !important;
+  transition:
+    box-shadow 0.25s ease,
+    border-color 0.2s ease !important;
+  overflow: hidden;
+}
+
+.p-card:hover {
+  box-shadow: var(--app-card-shadow-hover) !important;
+}
+
+.p-card .p-card-header {
+  padding: 1.25rem 1.5rem !important;
+}
+
+.p-card .p-card-body {
+  padding: 1.25rem 1.5rem !important;
+}
+
+.p-card .p-card-content {
+  padding: 1rem 0 !important;
+}
+
+/* ===== Tables ===== */
+.p-datatable {
+  background: var(--app-surface) !important;
+  border-radius: var(--app-card-radius) !important;
+  border: var(--app-card-border) !important;
+  overflow: hidden;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background: var(--app-column-bg) !important;
+  color: var(--app-text) !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  padding: 0.875rem 1rem !important;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  color: var(--app-text) !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background: var(--app-column-bg) !important;
+}
+
+/* ===== Dialogs ===== */
+.p-dialog .p-dialog-header {
+  background: var(--app-surface-elevated) !important;
+  color: var(--app-text) !important;
+  border-bottom: var(--app-card-border) !important;
+}
+
+.p-dialog .p-dialog-content {
+  background: var(--app-surface) !important;
+  color: var(--app-text) !important;
+}
+
+/* ===== Dark theme overrides ===== */
+.dark-theme {
+  html,
+  body {
+    background-color: var(--app-bg) !important;
+    color: var(--app-text) !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--app-text) !important;
+  }
+
+  .sidebar-nav a {
+    color: var(--app-text) !important;
+  }
+
+  .sidebar-nav a.active {
+    color: white !important;
+  }
+
+  /* PrimeNG dark mode overrides */
+  .p-button {
+    background: var(--app-surface-elevated) !important;
+    border-color: var(--app-border) !important;
+    color: var(--app-text) !important;
+  }
+  .p-button:hover:not(:disabled) {
+    background: var(--app-column-bg) !important;
+    border-color: var(--app-border) !important;
+    color: var(--app-text) !important;
+  }
+  .p-button.p-button-text {
+    background: transparent !important;
+    border-color: transparent !important;
+    color: var(--app-text) !important;
+  }
+  .p-button.p-button-text:hover:not(:disabled) {
+    background: var(--app-column-bg) !important;
+    color: var(--app-text) !important;
+  }
+  .p-button.p-button-danger.p-button-text:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #f87171 !important;
+  }
+  .p-inputtext {
+    background: var(--app-surface) !important;
+    border-color: var(--app-border) !important;
+    color: var(--app-text) !important;
+  }
+  .p-inputtext::placeholder {
+    color: var(--app-text-secondary) !important;
+  }
+  .p-dropdown {
+    background: var(--app-surface) !important;
+    border-color: var(--app-border) !important;
+  }
+  .p-dropdown .p-dropdown-label {
+    color: var(--app-text) !important;
+  }
+  /* Dropdown panel list - dark background (overlay appended to body) */
+  .p-dropdown-panel,
+  .p-dropdown-overlay,
+  .p-dropdown-panel .p-dropdown-items,
+  .p-dropdown-panel .p-dropdown-list,
+  .p-dropdown-panel .p-dropdown-header {
+    background: var(--app-surface-elevated) !important;
+    border-color: var(--app-border) !important;
+    color: var(--app-text) !important;
+  }
+  .p-dropdown-panel {
+    border: 1px solid var(--app-border) !important;
+  }
+  .p-dropdown-panel .p-dropdown-items-wrapper,
+  .p-dropdown-panel ul {
+    background: var(--app-surface-elevated) !important;
+  }
+  .p-dropdown-panel .p-dropdown-item {
+    color: var(--app-text) !important;
+    background: transparent !important;
+  }
+  .p-dropdown-panel .p-dropdown-item:hover,
+  .p-dropdown-panel .p-dropdown-item.p-focus {
+    background: var(--app-column-bg) !important;
+    color: var(--app-text) !important;
+  }
+  .p-dropdown-panel .p-dropdown-item.p-highlight {
+    background: var(--app-accent) !important;
+    color: white !important;
+  }
+  .p-dropdown-item {
+    color: var(--app-text) !important;
+  }
+  .p-dropdown-item:hover {
+    background: var(--app-column-bg) !important;
+  }
+  .p-selectbutton .p-button {
+    background: var(--app-surface) !important;
+    border-color: var(--app-border) !important;
+    color: var(--app-text) !important;
+  }
+  .p-selectbutton .p-button.p-highlight {
+    background: var(--app-accent) !important;
+    border-color: var(--app-accent) !important;
+    color: white !important;
+  }
+  .p-dialog {
+    background: var(--app-surface) !important;
+    border-color: var(--app-border) !important;
+  }
+  .p-dialog .p-dialog-header {
+    background: var(--app-surface-elevated) !important;
+    color: var(--app-text) !important;
+    border-color: var(--app-border) !important;
+  }
+  .p-dialog .p-dialog-content {
+    background: var(--app-surface) !important;
+    color: var(--app-text) !important;
+  }
+  .p-confirm-dialog {
+    background: var(--app-surface) !important;
+    border-color: var(--app-border) !important;
+  }
+  .p-confirm-dialog .p-dialog-header,
+  .p-confirm-dialog .p-dialog-content {
+    background: var(--app-surface) !important;
+    color: var(--app-text) !important;
+  }
+  .p-inputnumber-input {
+    background: var(--app-surface) !important;
+    border-color: var(--app-border) !important;
+    color: var(--app-text) !important;
+  }
+  .p-tooltip .p-tooltip-text {
+    background: var(--app-surface-elevated) !important;
+    color: var(--app-text) !important;
+    border-color: var(--app-border) !important;
+  }
+
+  /* Task card dark mode */
+  .task-card {
+    background: var(--app-surface) !important;
+    border-color: var(--app-border) !important;
+  }
+  .task-card .task-description {
+    color: var(--app-text) !important;
+  }
+  .task-card .task-day-badge {
+    background: var(--app-column-bg) !important;
+    color: var(--app-text-secondary) !important;
+  }
+  .task-card .task-hours {
+    color: var(--app-text) !important;
+  }
+  .task-card .log-form input.p-inputnumber-input,
+  .task-card input.p-inputnumber-input {
+    background: var(--app-surface) !important;
+    border-color: var(--app-border) !important;
+    color: var(--app-text) !important;
+  }
+  .task-card .p-progressbar {
+    background: var(--app-column-bg) !important;
+  }
+  .task-card .p-progressbar .p-progressbar-value {
+    background: var(--app-accent) !important;
+  }
+}
+
+/* ===== Empty states ===== */
+.empty-state {
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--app-text-secondary);
+  font-size: 0.95rem;
+  border-radius: var(--app-card-radius);
+  background: var(--app-column-bg);
+  border: 1px dashed var(--app-border);
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+.empty-state-icon {
+  font-size: 2.5rem;
+  color: var(--app-text-secondary);
+  opacity: 0.6;
+  margin-bottom: 0.75rem;
+}
+
+/* ===== Remove focus/active effects from form controls ===== */
+input:focus,
+input:focus-visible,
+input:active,
+.p-inputtext:focus,
+.p-inputtext:focus-visible,
+.p-dropdown:focus,
+.p-dropdown:focus-within,
+.p-dropdown.p-focus,
+.p-dropdown.p-inputwrapper-focus,
+.p-inputnumber:focus,
+.p-inputnumber:focus-within,
+.p-inputnumber.p-focus,
+.p-inputnumber.p-inputwrapper-focus,
+.p-inputnumber-input:focus,
+.p-inputnumber-input:focus-visible,
+.p-inputnumber-input:active,
+.p-inputnumber .p-inputnumber-input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.p-button:focus,
+.p-button:focus-visible,
+.p-button.p-focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* ===== Aspect tags (p-tag only) ===== */
+.p-tag.aspect-English {
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  box-shadow: 0 1px 3px rgba(25, 118, 210, 0.3) !important;
+}
+.p-tag.aspect-FE {
+  background: linear-gradient(135deg, #7b1fa2 0%, #6a1b9a 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  box-shadow: 0 1px 3px rgba(123, 31, 162, 0.3) !important;
+}
+.p-tag.aspect-BE {
+  background: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  box-shadow: 0 1px 3px rgba(56, 142, 60, 0.3) !important;
+}
+.p-tag.aspect-AI {
+  background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  box-shadow: 0 1px 3px rgba(245, 124, 0, 0.3) !important;
+}
+.p-tag.aspect-Soft_skills {
+  background: linear-gradient(135deg, #c2185b 0%, #ad1457 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  box-shadow: 0 1px 3px rgba(194, 24, 91, 0.3) !important;
+}
+.p-tag.aspect-Reading {
+  background: linear-gradient(135deg, #0097a7 0%, #00838f 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  box-shadow: 0 1px 3px rgba(0, 151, 167, 0.3) !important;
+}
+
+/* ===== Layout utilities ===== */
+.section-spacing {
+  margin-bottom: 2rem;
+}

@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: schedule
+      POSTGRES_PASSWORD: schedule
+      POSTGRES_DB: schedule_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: ./node-server
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://schedule:schedule@postgres:5432/schedule_db
+      JWT_SECRET: your-secret-change-in-prod
+      PORT: 3000
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
