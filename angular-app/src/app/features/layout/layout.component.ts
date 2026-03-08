@@ -174,6 +174,7 @@ import { AuthService } from '../../core/auth/auth.service';
       @media (max-width: 768px) {
         .sidebar {
           transform: translateX(-100%);
+          width: min(85vw, 280px);
         }
         .layout.sidebar-open .sidebar {
           transform: translateX(0);
@@ -195,7 +196,18 @@ import { AuthService } from '../../core/auth/auth.service';
           z-index: 100;
         }
         .content {
+          padding: 1rem;
           padding-top: 4rem;
+        }
+      }
+      @media (max-width: 480px) {
+        .content {
+          padding: 0.75rem;
+          padding-top: 3.5rem;
+        }
+        .sidebar-toggle {
+          top: 0.75rem;
+          left: 0.75rem;
         }
       }
     `,

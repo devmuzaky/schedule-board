@@ -186,6 +186,54 @@ const ASPECT_COLORS: Record<Aspect, string> = {
       .chart-container canvas {
         max-height: 280px;
       }
+      @media (max-width: 768px) {
+        .dashboard h2 {
+          font-size: 1.25rem;
+          margin-bottom: 1rem;
+        }
+        .stats-strip {
+          flex-direction: column;
+          gap: 1rem;
+          padding: 1rem 1.25rem;
+          margin-bottom: 1.5rem;
+        }
+        .stat-item {
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          padding-bottom: 0.75rem;
+          border-bottom: 1px solid var(--app-border);
+        }
+        .stat-item:last-child {
+          padding-bottom: 0;
+          border-bottom: none;
+        }
+        .summary-cards {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+        }
+        .chart-container {
+          height: 220px;
+        }
+        .chart-container canvas {
+          max-height: 220px;
+        }
+      }
+      @media (max-width: 480px) {
+        .stats-strip {
+          padding: 0.75rem 1rem;
+        }
+        .stat-value {
+          font-size: 1.25rem;
+        }
+        .chart-container {
+          height: 200px;
+        }
+        .chart-container canvas {
+          max-height: 200px;
+        }
+      }
     `,
   ],
 })

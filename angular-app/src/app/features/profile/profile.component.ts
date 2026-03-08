@@ -146,6 +146,42 @@ import { TaskService, ProgressLogResponse } from '../../shared/services/task.ser
         font-weight: 600;
         color: var(--app-text);
       }
+      @media (max-width: 768px) {
+        .profile h2 {
+          font-size: 1.25rem;
+          margin-bottom: 1rem;
+        }
+        .card-header {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .card-header .subtitle {
+          flex-basis: auto;
+        }
+        .log-item {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.5rem;
+          padding: 0.6rem 0.75rem;
+        }
+        .log-main {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+        }
+        .log-task {
+          overflow: visible;
+          text-overflow: clip;
+        }
+      }
+      @media (max-width: 480px) {
+        .profile h2 {
+          font-size: 1.1rem;
+        }
+        .log-date, .log-aspect, .log-task, .log-hours {
+          font-size: 0.8rem;
+        }
+      }
     `,
   ],
 })

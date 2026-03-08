@@ -132,6 +132,25 @@ import { AuthService } from '../../../core/auth/auth.service';
         margin-top: 0.5rem;
         padding: 0.75rem 1rem;
       }
+      @media (max-width: 480px) {
+        .login-container {
+          padding: 1rem;
+          align-items: flex-start;
+          padding-top: 2rem;
+        }
+        .login-card ::ng-deep .p-card {
+          border-radius: 16px;
+        }
+        .card-header {
+          padding: 1rem 1rem 0.5rem;
+        }
+        .card-header h2 {
+          font-size: 1.25rem;
+        }
+        .login-form {
+          padding: 0.75rem 1rem 1rem;
+        }
+      }
     `,
   ],
 })
