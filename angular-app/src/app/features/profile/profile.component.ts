@@ -2,7 +2,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
 import { ConfirmationService } from 'primeng/api';
 import { TaskService, ProgressLogResponse } from '../../shared/services/task.service';
@@ -10,7 +9,7 @@ import { TaskService, ProgressLogResponse } from '../../shared/services/task.ser
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, CardModule, ButtonModule, TooltipModule, RippleModule],
+  imports: [CommonModule, CardModule, ButtonModule, RippleModule],
   template: `
     <div class="profile">
       <h2>Progress History</h2>
@@ -43,7 +42,6 @@ import { TaskService, ProgressLogResponse } from '../../shared/services/task.ser
                   pRipple
                   (click)="confirmDeleteLog(log)"
                   [disabled]="deleting[log.id]"
-                  pTooltip="Remove this log"
                   class="p-button-text p-button-danger p-button-rounded p-button-sm"
                 ></button>
               </div>

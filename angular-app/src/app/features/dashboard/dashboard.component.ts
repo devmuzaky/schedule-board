@@ -4,7 +4,6 @@ import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { CardModule } from 'primeng/card';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TaskService } from '../../shared/services/task.service';
-import { ThemeService } from '../../core/theme/theme.service';
 import { Task, Aspect } from '../../shared/models/task.model';
 
 Chart.register(...registerables);
@@ -195,7 +194,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   readonly ASPECTS = ASPECTS;
   readonly ASPECT_PLANNED = ASPECT_PLANNED;
   private taskService = inject(TaskService);
-  private theme = inject(ThemeService);
   tasks: Task[] = [];
   private chart: Chart | null = null;
 
@@ -217,7 +215,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.tasks = t;
       this.updateChart();
     });
-    this.theme.darkMode$.subscribe(() => this.updateChart());
   }
 
   ngAfterViewInit() {
@@ -248,9 +245,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     if (!ctx) return;
 
     const studied = ASPECTS.map((a) => this.getStudied(a));
-    const isDark = document.documentElement.classList.contains('dark-theme');
-    const textColor = isDark ? '#94a3b8' : '#475569';
-    const gridColor = isDark ? 'rgba(148, 163, 184, 0.2)' : 'rgba(71, 85, 105, 0.2)';
+    const textColor = '#94a3b8';
+    const gridColor = 'rgba(148, 163, 184, 0.2)';
 
     const aspectColors = ASPECTS.map((a) => ASPECT_COLORS[a]);
 

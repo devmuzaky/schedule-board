@@ -2,10 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../../core/auth/auth.service';
-import { ThemeService } from '../../core/theme/theme.service';
 
 @Component({
   selector: 'app-layout',
@@ -14,7 +12,6 @@ import { ThemeService } from '../../core/theme/theme.service';
     CommonModule,
     RouterModule,
     ButtonModule,
-    TooltipModule,
     RippleModule,
   ],
   template: `
@@ -28,7 +25,6 @@ import { ThemeService } from '../../core/theme/theme.service';
             icon="pi pi-times"
             class="sidebar-close p-button-text p-button-rounded"
             (click)="sidebarOpen = false"
-            pTooltip="Close menu"
             aria-label="Close menu"
           ></button>
         </div>
@@ -47,16 +43,8 @@ import { ThemeService } from '../../core/theme/theme.service';
           </a>
         </nav>
         <div class="sidebar-footer">
-          <button
-            pButton
-            pRipple
-            [icon]="theme.darkMode ? 'pi pi-moon' : 'pi pi-sun'"
-            (click)="theme.toggle()"
-            [pTooltip]="theme.darkMode ? 'Light mode' : 'Dark mode'"
-            class="p-button-text p-button-rounded"
-          ></button>
           <span class="username">{{ auth.getUsername() }}</span>
-          <button pButton pRipple icon="pi pi-sign-out" (click)="logout()" pTooltip="Logout" class="p-button-text p-button-rounded"></button>
+          <button pButton pRipple icon="pi pi-sign-out" (click)="logout()" class="p-button-text p-button-rounded"></button>
         </div>
       </aside>
       <div class="sidebar-overlay" (click)="sidebarOpen = false" [class.visible]="sidebarOpen"></div>
@@ -67,7 +55,6 @@ import { ThemeService } from '../../core/theme/theme.service';
           icon="pi pi-bars"
           class="sidebar-toggle p-button-text p-button-rounded"
           (click)="sidebarOpen = true"
-          pTooltip="Open menu"
           aria-label="Open menu"
         ></button>
         <main class="content">
@@ -217,7 +204,7 @@ import { ThemeService } from '../../core/theme/theme.service';
 export class LayoutComponent {
   sidebarOpen = false;
 
-  constructor(public auth: AuthService, public theme: ThemeService) {}
+  constructor(public auth: AuthService) {}
 
   closeSidebarOnNav() {
     this.sidebarOpen = false;

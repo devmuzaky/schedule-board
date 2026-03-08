@@ -72,7 +72,6 @@ function getTodayDay(): Day {
     InputTextModule,
     FloatLabelModule,
     RippleModule,
-    TooltipModule,
   ],
   template: `
     <div class="board-header">
@@ -124,68 +123,44 @@ function getTodayDay(): Day {
         <div class="task-list">
           @for (task of filteredTasks; track task.id) {
             <div class="task-card">
-              <div class="task-card-header">
-                <p-tag
-                  [value]="task.aspect"
-                  [ngClass]="'aspect-' + task.aspect"
-                ></p-tag>
-                <span class="task-day-badge">{{ task.day }}</span>
+              <div class="task-card-row task-card-top">
+                <div class="task-card-meta">
+                  <p-tag
+                    [value]="task.aspect"
+                    [ngClass]="'aspect-' + task.aspect"
+                  ></p-tag>
+                  <span class="task-day-badge">{{ task.day }}</span>
+                  <span class="task-hours">{{ task.studiedHours }}/{{ task.plannedHours }}h</span>
+                  <p-dropdown
+                    [options]="dayOptions"
+                    [ngModel]="task.day"
+                    (ngModelChange)="confirmDayChange(task, $event)"
+                    optionLabel="label"
+                    optionValue="value"
+                    styleClass="p-inputtext-sm task-day-dropdown"
+                    appendTo="body"
+                  ></p-dropdown>
+                </div>
                 <div class="task-card-actions">
-                  <button
-                    pButton
-                    icon="pi pi-pencil"
-                    pRipple
-                    (click)="openEditDialog(task)"
-                    class="p-button-text p-button-rounded p-button-sm"
-                    pTooltip="Edit"
-                  ></button>
-                  <button
-                    pButton
-                    icon="pi pi-trash"
-                    pRipple
-                    (click)="confirmDelete(task)"
-                    class="p-button-text p-button-danger p-button-rounded p-button-sm"
-                    pTooltip="Delete"
-                  ></button>
+                  <button pButton icon="pi pi-pencil" pRipple (click)="openEditDialog(task)" class="p-button-text p-button-rounded p-button-sm"></button>
+                  <button pButton icon="pi pi-trash" pRipple (click)="confirmDelete(task)" class="p-button-text p-button-danger p-button-rounded p-button-sm"></button>
                 </div>
               </div>
-              <p class="task-description">{{ task.description }}</p>
-              <div class="task-meta">
-                <span class="task-hours"
-                  >{{ task.studiedHours }}/{{ task.plannedHours }}h</span
-                >
-                <p-dropdown
-                  [options]="dayOptions"
-                  [(ngModel)]="task.day"
-                  (onChange)="onDayChange(task)"
-                  optionLabel="label"
-                  optionValue="value"
-                  styleClass="p-inputtext-sm"
-                ></p-dropdown>
-              </div>
-              <p-progressBar
-                [value]="getProgressPercent(task)"
-                [showValue]="false"
-                styleClass="task-progress"
-              ></p-progressBar>
-              <div class="log-form">
-                <p-inputNumber
-                  [(ngModel)]="logHours[task.id]"
-                  [minFractionDigits]="2"
-                  [maxFractionDigits]="2"
-                  [min]="0"
-                  [step]="0.25"
-                  placeholder="Log hours"
-                  styleClass="log-input"
-                ></p-inputNumber>
-                <button
-                  pButton
-                  icon="pi pi-plus"
-                  (click)="logProgress(task)"
-                  [disabled]="!logHours[task.id] || logging[task.id]"
-                  class="p-button-rounded p-button-sm"
-                  pTooltip="Log progress"
-                ></button>
+              <div class="task-card-row task-card-bottom">
+                <p class="task-description">{{ task.description }}</p>
+                <p-progressBar [value]="getProgressPercent(task)" [showValue]="false" styleClass="task-progress"></p-progressBar>
+                <div class="log-form">
+                  <p-inputNumber
+                    [(ngModel)]="logHours[task.id]"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="2"
+                    [min]="0"
+                    [step]="0.25"
+                    placeholder="Log"
+                    styleClass="log-input"
+                  ></p-inputNumber>
+                  <button pButton icon="pi pi-plus" (click)="logProgress(task)" [disabled]="!logHours[task.id] || logging[task.id]" class="p-button-rounded p-button-sm"></button>
+                </div>
               </div>
             </div>
           }
@@ -198,20 +173,37 @@ function getTodayDay(): Day {
       [(visible)]="addDialogVisible"
       [modal]="true"
       [style]="{ width: '400px' }"
+      styleClass="add-edit-dialog"
       (onHide)="addForm.reset()"
     >
-      <form [formGroup]="addForm" (ngSubmit)="submitAdd()">
-        <div class="field">
-          <label for="add-aspect">Aspect</label>
-          <p-dropdown
-            id="add-aspect"
-            formControlName="aspect"
-            [options]="aspectOptions"
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Select aspect"
-            [style]="{ width: '100%' }"
-          ></p-dropdown>
+      <form [formGroup]="addForm" (ngSubmit)="submitAdd()" class="add-edit-form">
+        <div class="form-row form-row-2">
+          <div class="field">
+            <label for="add-aspect">Aspect</label>
+            <p-dropdown
+              id="add-aspect"
+              formControlName="aspect"
+              [options]="aspectOptions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Select aspect"
+              [style]="{ width: '100%' }"
+              appendTo="body"
+            ></p-dropdown>
+          </div>
+          <div class="field">
+            <label for="add-day">Day</label>
+            <p-dropdown
+              id="add-day"
+              formControlName="day"
+              [options]="dayOptions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Select day"
+              [style]="{ width: '100%' }"
+              appendTo="body"
+            ></p-dropdown>
+          </div>
         </div>
         <div class="field">
           <label for="add-description">Description</label>
@@ -234,18 +226,6 @@ function getTodayDay(): Day {
             placeholder="0.00"
             [style]="{ width: '100%' }"
           ></p-inputNumber>
-        </div>
-        <div class="field">
-          <label for="add-day">Day</label>
-          <p-dropdown
-            id="add-day"
-            formControlName="day"
-            [options]="dayOptions"
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Select day"
-            [style]="{ width: '100%' }"
-          ></p-dropdown>
         </div>
         <div class="dialog-actions">
           <button
@@ -270,20 +250,36 @@ function getTodayDay(): Day {
       [(visible)]="editDialogVisible"
       [modal]="true"
       [style]="{ width: '400px' }"
+      styleClass="add-edit-dialog"
       (onHide)="editingTask = null"
     >
       @if (editingTask) {
-        <form [formGroup]="editForm" (ngSubmit)="submitEdit()">
-          <div class="field">
-            <label for="edit-aspect">Aspect</label>
-            <p-dropdown
-              id="edit-aspect"
-              formControlName="aspect"
-              [options]="aspectOptions"
-              optionLabel="label"
-              optionValue="value"
-              [style]="{ width: '100%' }"
-            ></p-dropdown>
+        <form [formGroup]="editForm" (ngSubmit)="submitEdit()" class="add-edit-form">
+          <div class="form-row form-row-2">
+            <div class="field">
+              <label for="edit-aspect">Aspect</label>
+              <p-dropdown
+                id="edit-aspect"
+                formControlName="aspect"
+                [options]="aspectOptions"
+                optionLabel="label"
+                optionValue="value"
+                [style]="{ width: '100%' }"
+                appendTo="body"
+              ></p-dropdown>
+            </div>
+            <div class="field">
+              <label for="edit-day">Day</label>
+              <p-dropdown
+                id="edit-day"
+                formControlName="day"
+                [options]="dayOptions"
+                optionLabel="label"
+                optionValue="value"
+                [style]="{ width: '100%' }"
+                appendTo="body"
+              ></p-dropdown>
+            </div>
           </div>
           <div class="field">
             <label for="edit-description">Description</label>
@@ -304,17 +300,6 @@ function getTodayDay(): Day {
               [minFractionDigits]="2"
               [style]="{ width: '100%' }"
             ></p-inputNumber>
-          </div>
-          <div class="field">
-            <label for="edit-day">Day</label>
-            <p-dropdown
-              id="edit-day"
-              formControlName="day"
-              [options]="dayOptions"
-              optionLabel="label"
-              optionValue="value"
-              [style]="{ width: '100%' }"
-            ></p-dropdown>
           </div>
           <div class="dialog-actions">
             <button
@@ -390,92 +375,110 @@ function getTodayDay(): Day {
       .task-list {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.5rem;
       }
       .task-card {
         background: var(--app-surface);
         border-radius: var(--app-card-radius);
         border: var(--app-card-border);
-        padding: 1.25rem 1.5rem;
+        padding: 0.5rem 0.85rem;
         box-shadow: var(--app-card-shadow);
         transition: box-shadow 0.25s ease;
       }
       .task-card:hover {
         box-shadow: var(--app-card-shadow-hover);
       }
-      .task-card-header {
+      .task-card-row {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 0.75rem;
-        flex-wrap: wrap;
+        gap: 0.5rem;
+        min-width: 0;
+      }
+      .task-card-top {
+        margin-bottom: 0.25rem;
+      }
+      .task-card-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex: 1;
+        min-width: 0;
       }
       .task-day-badge {
-        font-size: 0.75rem;
-        padding: 0.25rem 0.6rem;
-        border-radius: 6px;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.45rem;
+        border-radius: 5px;
         background: var(--app-column-bg);
         color: var(--app-text-secondary);
         font-weight: 500;
       }
-      .task-card-actions {
-        margin-left: auto;
-        display: flex;
-        gap: 0.25rem;
-      }
-      .task-description {
-        font-size: 1rem;
-        font-weight: 500;
-        margin: 0 0 0.75rem 0;
-        color: var(--app-text);
-        line-height: 1.4;
-      }
-      .task-meta {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 0.75rem;
-        flex-wrap: wrap;
-      }
-      .task-meta .task-hours {
-        font-size: 0.9rem;
+      .task-hours {
+        font-size: 0.85rem;
         font-weight: 600;
         color: var(--app-text);
       }
+      .task-day-dropdown {
+        min-width: 100px;
+      }
+      .task-day-dropdown ::ng-deep .p-dropdown {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+      }
+      .task-card-actions {
+        display: flex;
+        gap: 0.15rem;
+        flex-shrink: 0;
+      }
+      .task-card-bottom {
+        gap: 0.6rem;
+      }
+      .task-card-bottom .task-description {
+        flex: 1;
+        min-width: 0;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin: 0;
+        color: var(--app-text);
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
       .task-progress {
-        margin: 0 0 0.75rem 0;
+        flex: 1 1 120px;
+        margin: 0;
+        min-width: 80px;
       }
       .task-progress ::ng-deep .p-progressbar {
-        height: 8px;
-        border-radius: 6px;
+        height: 6px;
+        border-radius: 4px;
         background: var(--app-column-bg) !important;
         overflow: hidden;
       }
       .task-progress ::ng-deep .p-progressbar .p-progressbar-value {
-        border-radius: 6px;
+        border-radius: 4px;
         background: var(--app-accent) !important;
       }
       .log-form {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        margin-top: 0.5rem;
+        gap: 0.35rem;
+        flex-shrink: 0;
       }
       .log-form p-inputnumber {
-        flex: 1;
-        max-width: 130px;
+        width: 70px;
       }
       .log-form ::ng-deep .p-inputnumber {
         width: 100%;
       }
       .log-form ::ng-deep .p-inputnumber-input {
         width: 100%;
-        padding: 0.5rem 0.75rem;
-        font-size: 0.9rem;
+        padding: 0.3rem 0.5rem;
+        font-size: 0.85rem;
         background: var(--app-surface) !important;
         border: 1px solid var(--app-border) !important;
         color: var(--app-text) !important;
-        border-radius: 8px;
+        border-radius: 6px;
       }
       .log-form ::ng-deep .p-inputnumber-input::placeholder {
         color: var(--app-text-secondary);
@@ -610,9 +613,24 @@ export class ScheduleBoardComponent implements OnInit {
     localStorage.setItem(SELECTED_DAY_KEY, this.selectedDay);
   }
 
-  onDayChange(task: Task) {
-    this.taskService.updateTask(task.id, { day: task.day }).subscribe({
-      error: () => this.taskService.loadTasks().subscribe(),
+  confirmDayChange(task: Task, newDay: Day) {
+    const oldDay = task.day;
+    if (newDay === oldDay) return;
+    this.confirmationService.confirm({
+      message: `Move "${task.description}" from ${oldDay} to ${newDay}?`,
+      header: 'Move Task',
+      icon: 'pi pi-calendar',
+      accept: () => {
+        this.taskService.updateTask(task.id, { day: newDay }).subscribe({
+          next: () => {
+            task.day = newDay;
+          },
+          error: () => this.taskService.loadTasks().subscribe(),
+        });
+      },
+      reject: () => {
+        // task.day stays oldDay, dropdown reverts via [ngModel]
+      },
     });
   }
 

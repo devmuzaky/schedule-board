@@ -6,10 +6,8 @@ import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../../../core/auth/auth.service';
-import { ThemeService } from '../../../core/theme/theme.service';
 
 @Component({
   selector: 'app-login',
@@ -21,11 +19,9 @@ import { ThemeService } from '../../../core/theme/theme.service';
     InputTextModule,
     FloatLabelModule,
     ButtonModule,
-    TooltipModule,
     RippleModule,
   ],
   template: `
-    <button pButton pRipple [icon]="theme.darkMode ? 'pi pi-moon' : 'pi pi-sun'" class="theme-toggle p-button-text p-button-rounded" (click)="theme.toggle()" [pTooltip]="theme.darkMode ? 'Light mode' : 'Dark mode'"></button>
     <div class="login-container">
       <p-card class="login-card">
         <ng-template pTemplate="header">
@@ -64,12 +60,6 @@ import { ThemeService } from '../../../core/theme/theme.service';
   `,
   styles: [
     `
-      .theme-toggle {
-        position: fixed;
-        top: 1rem;
-        right: 1rem;
-        z-index: 100;
-      }
       .login-container {
         display: flex;
         justify-content: center;
@@ -83,17 +73,11 @@ import { ThemeService } from '../../../core/theme/theme.service';
       }
       .login-card ::ng-deep .p-card {
         border-radius: 20px;
-        border: 2px solid var(--app-accent);
-        box-shadow: var(--app-card-shadow-hover), 0 0 0 1px rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(96, 165, 250, 0.4);
+        box-shadow: var(--app-card-shadow-hover), 0 0 0 1px rgba(96, 165, 250, 0.1);
         overflow: hidden;
       }
-      .dark-theme .login-card ::ng-deep .p-card {
-        border-color: var(--app-accent);
-      }
       .login-card ::ng-deep .p-card:hover {
-        box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.2), 0 0 0 1px rgba(59, 130, 246, 0.15);
-      }
-      .dark-theme .login-card ::ng-deep .p-card:hover {
         box-shadow: 0 20px 40px -10px rgba(96, 165, 250, 0.25);
       }
       .card-header {
@@ -161,8 +145,7 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router,
-    public theme: ThemeService
+    private router: Router
   ) {}
 
   onSubmit() {
