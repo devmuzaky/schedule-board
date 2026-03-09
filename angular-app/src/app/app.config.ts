@@ -5,12 +5,13 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
+import { loadingInterceptor } from './core/loading/loading.interceptor';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([loadingInterceptor, authInterceptor])),
     provideAnimations(),
     MessageService,
     ConfirmationService,

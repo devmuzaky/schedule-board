@@ -5,15 +5,25 @@ import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../../core/auth/auth.service';
 
+const SIDEBAR_COLLAPSED_KEY = 'schedule-sidebar-collapsed';
+
 @Component({
   selector: 'app-layout',
   standalone: true,
   imports: [CommonModule, RouterModule, ButtonModule, RippleModule],
   template: `
-    <div class="layout" [class.sidebar-open]="sidebarOpen">
+    <div class="layout" [class.sidebar-open]="sidebarOpen" [class.sidebar-collapsed]="sidebarCollapsed">
       <aside class="sidebar">
         <div class="sidebar-header">
           <h1 class="app-title">Moe Zaky's Tasks</h1>
+          <button
+            pButton
+            pRipple
+            [icon]="sidebarCollapsed ? 'pi pi-chevron-right' : 'pi pi-chevron-left'"
+            class="sidebar-collapse-btn p-button-text p-button-rounded"
+            (click)="toggleSidebarCollapse()"
+            aria-label="Toggle sidebar"
+          ></button>
           <button
             pButton
             pRipple
@@ -29,37 +39,37 @@ import { AuthService } from '../../core/auth/auth.service';
             pRipple
             routerLink="/board"
             routerLinkActive="active"
-            class="p-button-text"
+            class="p-button-text nav-link"
             (click)="closeSidebarOnNav()"
           >
             <i class="pi pi-calendar"></i>
-            <span>Board</span>
+            <span class="nav-label">Board</span>
           </a>
           <a
             pButton
             pRipple
             routerLink="/dashboard"
             routerLinkActive="active"
-            class="p-button-text"
+            class="p-button-text nav-link"
             (click)="closeSidebarOnNav()"
           >
             <i class="pi pi-chart-bar"></i>
-            <span>Dashboard</span>
+            <span class="nav-label">Dashboard</span>
           </a>
           <a
             pButton
             pRipple
             routerLink="/profile"
             routerLinkActive="active"
-            class="p-button-text"
+            class="p-button-text nav-link"
             (click)="closeSidebarOnNav()"
           >
             <i class="pi pi-user"></i>
-            <span>Profile</span>
+            <span class="nav-label">Profile</span>
           </a>
         </nav>
         <div class="sidebar-footer">
-          <span class="username">{{ auth.getUsername() || 'moezaky' }}</span>
+          <span class="username" [title]="auth.getUsername() || 'moezaky'">{{ auth.getUsername() || 'moezaky' }}</span>
         </div>
       </aside>
       <div
@@ -107,6 +117,12 @@ import { AuthService } from '../../core/auth/auth.service';
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 0.5rem;
+      }
+      .sidebar-collapse-btn {
+        display: none;
+        min-width: 36px;
+        min-height: 36px;
       }
       .sidebar-close {
         display: none;
@@ -175,6 +191,57 @@ import { AuthService } from '../../core/auth/auth.service';
         min-width: 0;
         display: flex;
         flex-direction: column;
+        transition: margin-left 0.25s ease;
+      }
+      .layout.sidebar-collapsed .sidebar {
+        width: 56px;
+      }
+      .layout.sidebar-collapsed .sidebar-header {
+        padding: 0.75rem;
+        justify-content: center;
+        position: relative;
+      }
+      .layout.sidebar-collapsed .app-title,
+      .layout.sidebar-collapsed .nav-label,
+      .layout.sidebar-collapsed .username {
+        display: none;
+      }
+      .layout.sidebar-collapsed .sidebar-collapse-btn {
+        display: flex !important;
+        position: absolute;
+        right: -14px;
+        top: 50%;
+        transform: translateY(-50%);
+        min-width: 28px;
+        min-height: 28px;
+        font-size: 0.75rem;
+        z-index: 10;
+        background: var(--app-surface) !important;
+        border: 1px solid var(--app-border) !important;
+        box-shadow: var(--app-card-shadow);
+      }
+      .layout.sidebar-collapsed .sidebar-nav a {
+        justify-content: center;
+        padding: 0.65rem;
+      }
+      .layout.sidebar-collapsed .sidebar-nav a.active {
+        margin-left: 0;
+        padding-left: 0.65rem;
+        border-left: none;
+        border-bottom: 3px solid var(--app-accent);
+        margin-bottom: -3px;
+      }
+      .layout.sidebar-collapsed .sidebar-footer {
+        padding: 0.75rem;
+        justify-content: center;
+      }
+      .layout.sidebar-collapsed .main {
+        margin-left: 56px;
+      }
+      @media (min-width: 769px) {
+        .sidebar-collapse-btn {
+          display: flex !important;
+        }
       }
       .sidebar-toggle {
         display: none;
@@ -207,6 +274,12 @@ import { AuthService } from '../../core/auth/auth.service';
         }
         .layout.sidebar-open .sidebar {
           transform: translateX(0);
+        }
+        .layout.sidebar-collapsed .sidebar {
+          width: min(90vw, 300px);
+        }
+        .layout.sidebar-collapsed .sidebar-collapse-btn {
+          display: none !important;
         }
         .sidebar-close {
           display: block;
@@ -269,8 +342,17 @@ import { AuthService } from '../../core/auth/auth.service';
 })
 export class LayoutComponent {
   sidebarOpen = false;
+  sidebarCollapsed = false;
 
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService) {
+    const stored = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
+    this.sidebarCollapsed = stored === 'true';
+  }
+
+  toggleSidebarCollapse() {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
+    localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(this.sidebarCollapsed));
+  }
 
   closeSidebarOnNav() {
     this.sidebarOpen = false;

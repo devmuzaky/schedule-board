@@ -1,0 +1,26 @@
+.global-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 9999;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.loader-bar {
+  height: 100%;
+  width: 30%;
+  background: linear-gradient(90deg, var(--app-accent), var(--app-accent-text));
+  animation: loader-indeterminate 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes loader-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
