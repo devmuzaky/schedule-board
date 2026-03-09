@@ -186,13 +186,16 @@ import { TaskService } from '../../shared/services/task.service';
       @media (max-width: 768px) {
         .sidebar {
           transform: translateX(-100%);
-          width: min(85vw, 280px);
+          width: min(90vw, 300px);
+          padding-bottom: env(safe-area-inset-bottom);
         }
         .layout.sidebar-open .sidebar {
           transform: translateX(0);
         }
         .sidebar-close {
           display: block;
+          min-width: 44px;
+          min-height: 44px;
         }
         .sidebar-overlay {
           display: block;
@@ -201,25 +204,48 @@ import { TaskService } from '../../shared/services/task.service';
           margin-left: 0;
         }
         .sidebar-toggle {
-          display: block;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           position: fixed;
-          top: 1rem;
-          left: 1rem;
+          top: max(1rem, env(safe-area-inset-top));
+          left: max(1rem, env(safe-area-inset-left));
           z-index: 100;
+          min-width: 48px;
+          min-height: 48px;
+          border-radius: 12px;
+          background: var(--app-glass-bg) !important;
+          border: var(--app-glass-border) !important;
+        }
+        .sidebar-header {
+          padding: 1rem 1rem;
+        }
+        .app-title {
+          font-size: 1rem;
+        }
+        .sidebar-nav a {
+          padding: 0.85rem 1rem;
+          min-height: 48px;
+        }
+        .sidebar-footer {
+          padding: 1rem;
         }
         .content {
           padding: 1rem;
-          padding-top: 4rem;
+          padding-top: calc(48px + 1rem + env(safe-area-inset-top));
         }
       }
       @media (max-width: 480px) {
+        .sidebar {
+          width: 100vw;
+        }
         .content {
           padding: 0.75rem;
-          padding-top: 3.5rem;
+          padding-top: calc(48px + 0.75rem + env(safe-area-inset-top));
         }
         .sidebar-toggle {
-          top: 0.75rem;
-          left: 0.75rem;
+          top: max(0.75rem, env(safe-area-inset-top));
+          left: max(0.75rem, env(safe-area-inset-left));
         }
       }
     `,

@@ -188,13 +188,16 @@ const ASPECT_COLORS: Record<Aspect, string> = {
         max-height: 280px;
       }
       @media (max-width: 768px) {
+        .dashboard {
+          width: 100%;
+        }
         .dashboard h2 {
           font-size: 1.25rem;
           margin-bottom: 1rem;
         }
         .stats-strip {
           flex-direction: column;
-          gap: 1rem;
+          gap: 0;
           padding: 1rem 1.25rem;
           margin-bottom: 1.5rem;
         }
@@ -202,31 +205,54 @@ const ASPECT_COLORS: Record<Aspect, string> = {
           flex-direction: row;
           align-items: center;
           justify-content: space-between;
-          padding-bottom: 0.75rem;
+          padding: 1rem 0;
+          min-height: 56px;
           border-bottom: 1px solid var(--app-border);
         }
         .stat-item:last-child {
           padding-bottom: 0;
           border-bottom: none;
         }
+        .stat-value {
+          font-size: 1.35rem;
+        }
         .summary-cards {
           grid-template-columns: 1fr;
           gap: 1rem;
           margin-bottom: 1.5rem;
         }
+        .summary-card ::ng-deep .p-card-header {
+          padding: 1rem 1.25rem !important;
+        }
+        .summary-card ::ng-deep .p-card-body {
+          padding: 1rem 1.25rem !important;
+        }
+        .chart-card ::ng-deep .p-card-header,
+        .chart-card ::ng-deep .p-card-body {
+          padding: 1rem 1.25rem !important;
+        }
         .chart-container {
-          height: 220px;
+          height: 240px;
         }
         .chart-container canvas {
-          max-height: 220px;
+          max-height: 240px;
         }
       }
       @media (max-width: 480px) {
         .stats-strip {
-          padding: 0.75rem 1rem;
+          padding: 0.85rem 1rem;
+        }
+        .stat-item {
+          padding: 0.85rem 0;
         }
         .stat-value {
           font-size: 1.25rem;
+        }
+        .stat-label {
+          font-size: 0.8rem;
+        }
+        .summary-card ::ng-deep .p-card-header {
+          padding: 0.85rem 1rem !important;
         }
         .chart-container {
           height: 200px;

@@ -134,11 +134,29 @@ import { AuthService } from '../../../core/auth/auth.service';
         margin-top: 0.5rem;
         padding: 0.75rem 1rem;
       }
+      @media (max-width: 768px) {
+        .login-container {
+          padding: 1.5rem 1rem;
+          min-height: 100vh;
+          min-height: 100dvh;
+          padding-top: max(2rem, env(safe-area-inset-top));
+          padding-bottom: env(safe-area-inset-bottom);
+        }
+        .login-card {
+          max-width: 100%;
+        }
+        .field .p-float-label input {
+          min-height: 48px;
+          padding: 0.85rem 1rem;
+        }
+        .submit-btn {
+          min-height: 48px;
+        }
+      }
       @media (max-width: 480px) {
         .login-container {
-          padding: 1rem;
-          align-items: flex-start;
-          padding-top: 2rem;
+          padding: 1rem 0.75rem;
+          padding-top: max(1.5rem, env(safe-area-inset-top));
         }
         .login-card ::ng-deep .p-card {
           border-radius: 16px;
@@ -147,10 +165,19 @@ import { AuthService } from '../../../core/auth/auth.service';
           padding: 1rem 1rem 0.5rem;
         }
         .card-header h2 {
-          font-size: 1.25rem;
+          font-size: 1.2rem;
+        }
+        .card-header .tagline {
+          font-size: 0.8rem;
         }
         .login-form {
-          padding: 0.75rem 1rem 1rem;
+          padding: 0.85rem 1rem 1rem;
+        }
+        .field .p-float-label input {
+          min-height: 48px;
+        }
+        .submit-btn {
+          min-height: 48px;
         }
       }
     `,

@@ -514,62 +514,93 @@ function getTodayDay(): Day {
           flex-direction: column;
           align-items: stretch;
           margin-bottom: 1rem;
+          gap: 1rem;
         }
         .board-header h2 {
           font-size: 1.25rem;
+          margin: 0;
         }
         .header-actions {
           flex-wrap: wrap;
           gap: 0.5rem;
         }
-        .header-actions > * {
-          flex: 1 1 auto;
-          min-width: 100px;
+        .header-actions .p-button {
+          flex: 1 1 100%;
+          min-height: 48px;
+          justify-content: center;
         }
         .day-tabs {
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
-          padding-bottom: 0.25rem;
+          padding-bottom: 0.5rem;
           margin-bottom: 1rem;
+          gap: 0.5rem;
+          scrollbar-width: none;
+        }
+        .day-tabs::-webkit-scrollbar {
+          display: none;
         }
         .day-tab {
           flex-shrink: 0;
-          padding: 0.4rem 0.75rem;
-          font-size: 0.85rem;
+          padding: 0.6rem 1rem;
+          font-size: 0.9rem;
+          min-height: 44px;
+        }
+        .task-list {
+          gap: 0.75rem;
         }
         .task-card {
-          padding: 0.5rem 0.75rem;
+          padding: 0.85rem 1rem;
         }
         .task-card-top {
           flex-wrap: wrap;
+          gap: 0.5rem;
         }
         .task-card-meta {
           flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+        .task-card-actions .p-button {
+          min-width: 44px;
+          min-height: 44px;
         }
         .task-card-bottom {
           flex-wrap: wrap;
+          gap: 0.75rem;
         }
         .task-card-bottom .task-description {
           flex-basis: 100%;
           order: -1;
           white-space: normal;
           margin-bottom: 0.25rem;
+          font-size: 0.95rem;
         }
         .task-progress {
           flex: 1 1 100%;
           min-width: 100%;
         }
         .log-form {
-          flex: 1;
+          flex: 1 1 100%;
           min-width: 0;
+          min-height: 44px;
+        }
+        .log-form p-inputnumber {
+          width: 90px;
+        }
+        .log-form .p-button {
+          min-width: 44px;
+          min-height: 44px;
         }
       }
       @media (max-width: 480px) {
         .board-header h2 {
-          font-size: 1.1rem;
+          font-size: 1.15rem;
         }
-        .header-actions {
-          flex-direction: column;
+        .header-actions .p-button {
+          min-height: 48px;
+        }
+        .task-card {
+          padding: 0.75rem 0.85rem;
         }
         .task-card-meta .p-tag,
         .task-card-meta .task-day-badge,
@@ -577,7 +608,10 @@ function getTodayDay(): Day {
           font-size: 0.75rem;
         }
         .task-day-dropdown {
-          min-width: 85px;
+          min-width: 90px;
+        }
+        .day-tab {
+          padding: 0.5rem 0.85rem;
         }
       }
     `,

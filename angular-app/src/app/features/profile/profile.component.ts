@@ -152,6 +152,9 @@ import { Router } from '@angular/router';
         color: var(--app-text);
       }
       @media (max-width: 768px) {
+        .profile {
+          width: 100%;
+        }
         .profile h2 {
           font-size: 1.25rem;
           margin-bottom: 1rem;
@@ -159,15 +162,29 @@ import { Router } from '@angular/router';
         .card-header {
           flex-direction: column;
           align-items: stretch;
+          gap: 0.75rem;
         }
         .card-header .subtitle {
           flex-basis: auto;
+        }
+        .export-btn {
+          min-height: 44px;
+          width: 100%;
+        }
+        .log-list {
+          gap: 0.6rem;
         }
         .log-item {
           flex-direction: column;
           align-items: stretch;
           gap: 0.5rem;
-          padding: 0.6rem 0.75rem;
+          padding: 0.85rem 1rem;
+          min-height: 56px;
+        }
+        .log-item .p-button {
+          min-width: 44px;
+          min-height: 44px;
+          align-self: flex-end;
         }
         .log-main {
           flex-direction: column;
