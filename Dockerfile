@@ -1,5 +1,6 @@
 # Build context: repo root. Builds node-server (backend API).
-FROM node:20-alpine
+# Use Debian slim (not Alpine) - Prisma has OpenSSL issues on Alpine 3.21
+FROM node:20-slim
 
 WORKDIR /app
 
