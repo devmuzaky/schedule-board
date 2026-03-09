@@ -35,7 +35,7 @@ const ASPECT_COLORS: Record<Aspect, string> = {
   imports: [CommonModule, CardModule, ProgressBarModule],
   template: `
     <div class="dashboard">
-      <h2>Weekly Summary</h2>
+      <h2>Moe Zaky's Weekly Summary</h2>
 
       <div class="stats-strip">
         <div class="stat-item">
@@ -44,22 +44,18 @@ const ASPECT_COLORS: Record<Aspect, string> = {
         </div>
         <div class="stat-item">
           <span class="stat-value">{{ tasksCompleted }}</span>
-          <span class="stat-label">Tasks completed</span>
+          <span class="stat-label">My tasks completed</span>
         </div>
         <div class="stat-item">
           <span class="stat-value">{{ totalPlannedHours | number:'1.0-0' }}h</span>
-          <span class="stat-label">Planned total</span>
+          <span class="stat-label">My planned total</span>
         </div>
       </div>
 
       @if (tasks.length === 0) {
         <div class="empty-state">
           <i class="pi pi-chart-line empty-state-icon"></i>
-          @if (auth.isLoggedIn()) {
-            <p>No tasks yet. Add tasks on the Board to see your progress.</p>
-          } @else {
-            <p>Log in to view your weekly summary.</p>
-          }
+          <p>No tasks yet. Add tasks on the Board to see my progress.</p>
         </div>
       } @else {
         <div class="summary-cards">
@@ -77,7 +73,7 @@ const ASPECT_COLORS: Record<Aspect, string> = {
         </div>
         <p-card class="chart-card">
           <ng-template pTemplate="header">
-            <h3>Progress by Aspect</h3>
+            <h3>My Progress by Aspect</h3>
           </ng-template>
           <div class="chart-container">
             <canvas #chartCanvas></canvas>
@@ -264,9 +260,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    if (this.auth.isLoggedIn()) {
-      this.taskService.loadTasks().subscribe();
-    }
+    this.taskService.loadTasks().subscribe();
     this.taskService.tasks.subscribe((t) => {
       this.tasks = t;
       this.updateChart();

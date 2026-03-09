@@ -1,15 +1,17 @@
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { authMiddleware, AuthRequest } from '../middleware/auth';
+import { authMiddleware, optionalAuthMiddleware, AuthRequest } from '../middleware/auth';
 
 const router = Router();
 const prisma = new PrismaClient();
 
-router.use(authMiddleware);
-
-router.get('/logs', async (req: AuthRequest, res, next) => {
+router.get('/logs', optionalAuthMiddleware, async (req: AuthRequest, res, next) => {
   try {
-    const userId = req.user!.userId;
+    const userId = req.user?.userId;
+    if (!userId) {
+      res.json([]);
+      return;
+    }
     const logs = await prisma.progressLog.findMany({
       where: { task: { userId } },
       include: { task: true },
@@ -21,7 +23,7 @@ router.get('/logs', async (req: AuthRequest, res, next) => {
   }
 });
 
-router.get('/export', async (req: AuthRequest, res, next) => {
+router.get('/export', authMiddleware, async (req: AuthRequest, res, next) => {
   try {
     const userId = req.user!.userId;
     const logs = await prisma.progressLog.findMany({
@@ -42,7 +44,7 @@ router.get('/export', async (req: AuthRequest, res, next) => {
   }
 });
 
-router.post('/:taskId', async (req: AuthRequest, res, next) => {
+router.post('/:taskId', authMiddleware, async (req: AuthRequest, res, next) => {
   try {
     const userId = req.user!.userId;
     const { taskId } = req.params;
@@ -84,7 +86,7 @@ router.post('/:taskId', async (req: AuthRequest, res, next) => {
   }
 });
 
-router.delete('/log/:logId', async (req: AuthRequest, res, next) => {
+router.delete('/log/:logId', authMiddleware, async (req: AuthRequest, res, next) => {
   try {
     const userId = req.user!.userId;
     const { logId } = req.params;

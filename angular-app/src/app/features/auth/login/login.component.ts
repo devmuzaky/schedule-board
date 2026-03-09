@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { filter, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
@@ -29,9 +30,9 @@ import { AuthService } from '../../../core/auth/auth.service';
             <div class="logo-area">
               <i class="pi pi-calendar"></i>
             </div>
-            <h2>Moe Zaky's Schedule</h2>
-            <p class="subtitle">Sign in to manage your schedule</p>
-            <p class="tagline">Track your weekly goals and progress in one place.</p>
+            <h2>Moe Zaky's Tasks</h2>
+            <p class="subtitle">Sign in to manage my tasks</p>
+            <p class="tagline">My personal task tracker and progress.</p>
           </div>
         </ng-template>
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
@@ -155,10 +156,10 @@ import { AuthService } from '../../../core/auth/auth.service';
     `,
   ],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   form = this.fb.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required],
+    username: ['moezaky', Validators.required],
+    password: ['password123', Validators.required],
   });
   loading = false;
 
@@ -167,6 +168,14 @@ export class LoginComponent {
     private auth: AuthService,
     private router: Router
   ) {}
+
+  ngOnInit() {
+    if (this.auth.isLoggedIn()) {
+      this.router.navigate(['/board']);
+      return;
+    }
+    this.auth.loggedIn.pipe(filter((v) => v), take(1)).subscribe(() => this.router.navigate(['/board']));
+  }
 
   onSubmit() {
     if (this.form.invalid) return;

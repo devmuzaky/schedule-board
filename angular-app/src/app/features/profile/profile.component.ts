@@ -14,12 +14,12 @@ import { Router } from '@angular/router';
   imports: [CommonModule, CardModule, ButtonModule, RippleModule],
   template: `
     <div class="profile">
-      <h2>Progress History</h2>
+      <h2>Moe Zaky's Progress History</h2>
       <p-card>
         <ng-template pTemplate="header">
           <div class="card-header">
-            <h3>Your Activity</h3>
-            <p class="subtitle">All logged progress entries</p>
+            <h3>My Activity</h3>
+            <p class="subtitle">All my logged progress entries</p>
             @if (auth.isLoggedIn()) {
             <button pButton (click)="exportCsv()" [disabled]="exporting" [label]="exporting ? 'Exporting...' : 'Export to CSV'" icon="pi pi-download" class="export-btn"></button>
           }
@@ -28,11 +28,7 @@ import { Router } from '@angular/router';
         @if (logs.length === 0) {
           <div class="empty-state">
             <i class="pi pi-history empty-state-icon"></i>
-            @if (auth.isLoggedIn()) {
-              <p>No progress logged yet.</p>
-            } @else {
-              <p>Log in to view your progress history.</p>
-            }
+            <p>No progress logged yet.</p>
           </div>
         } @else {
           <div class="log-list">
@@ -204,11 +200,9 @@ export class ProfileComponent implements OnInit {
   deleting: Record<string, boolean> = {};
 
   ngOnInit() {
-    if (this.auth.isLoggedIn()) {
-      this.taskService.getProgressLogs().subscribe((logs) => {
-        this.logs = logs;
-      });
-    }
+    this.taskService.getProgressLogs().subscribe((logs) => {
+      this.logs = logs;
+    });
   }
 
   confirmDeleteLog(log: ProgressLogResponse) {

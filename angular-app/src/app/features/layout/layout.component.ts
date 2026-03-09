@@ -19,7 +19,7 @@ import { TaskService } from '../../shared/services/task.service';
     <div class="layout" [class.sidebar-open]="sidebarOpen">
       <aside class="sidebar">
         <div class="sidebar-header">
-          <h1 class="app-title">Moe Zaky's Schedule</h1>
+          <h1 class="app-title">Moe Zaky's Tasks</h1>
           <button
             pButton
             pRipple

@@ -74,7 +74,7 @@ function getTodayDay(): Day {
   ],
   template: `
     <div class="board-header">
-      <h2>Weekly Schedule</h2>
+      <h2>Moe Zaky's Weekly Tasks</h2>
       @if (auth.isLoggedIn()) {
       <div class="header-actions">
         <button
@@ -110,9 +110,9 @@ function getTodayDay(): Day {
         <div class="empty-state">
           <i class="pi pi-inbox empty-state-icon"></i>
           @if (auth.isLoggedIn()) {
-            <p>No tasks yet. Click "Add Task" to create one.</p>
+            <p>No tasks yet. Click "Add Task" to create my first task.</p>
           } @else {
-            <p>Log in to add and manage your tasks.</p>
+            <p>No tasks yet. Log in to add and manage my tasks.</p>
           }
         </div>
       } @else {
@@ -638,9 +638,7 @@ export class ScheduleBoardComponent implements OnInit {
     const storedDay = localStorage.getItem(SELECTED_DAY_KEY);
     if (storedDay && DAYS.includes(storedDay as Day))
       this.selectedDay = storedDay as Day;
-    if (this.auth.isLoggedIn()) {
-      this.taskService.loadTasks().subscribe();
-    }
+    this.taskService.loadTasks().subscribe();
     this.taskService.tasks.subscribe((t) => {
       this.tasks = t;
       this.rebuildTasksByDay(t);

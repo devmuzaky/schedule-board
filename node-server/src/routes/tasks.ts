@@ -1,15 +1,17 @@
 import { Router } from 'express';
 import { PrismaClient, Day, Aspect } from '@prisma/client';
-import { authMiddleware, AuthRequest } from '../middleware/auth';
+import { authMiddleware, optionalAuthMiddleware, AuthRequest } from '../middleware/auth';
 
 const router = Router();
 const prisma = new PrismaClient();
 
-router.use(authMiddleware);
-
-router.get('/', async (req: AuthRequest, res, next) => {
+router.get('/', optionalAuthMiddleware, async (req: AuthRequest, res, next) => {
   try {
-    const userId = req.user!.userId;
+    const userId = req.user?.userId;
+    if (!userId) {
+      res.json([]);
+      return;
+    }
     const tasks = await prisma.task.findMany({
       where: { userId },
       include: { progressLogs: true },
@@ -21,7 +23,7 @@ router.get('/', async (req: AuthRequest, res, next) => {
   }
 });
 
-router.post('/', async (req: AuthRequest, res, next) => {
+router.post('/', authMiddleware, async (req: AuthRequest, res, next) => {
   try {
     const userId = req.user!.userId;
     const { aspect, description, plannedHours, day } = req.body;
@@ -44,7 +46,7 @@ router.post('/', async (req: AuthRequest, res, next) => {
   }
 });
 
-router.patch('/:id', async (req: AuthRequest, res, next) => {
+router.patch('/:id', authMiddleware, async (req: AuthRequest, res, next) => {
   try {
     const userId = req.user!.userId;
     const { id } = req.params;
@@ -79,7 +81,7 @@ router.patch('/:id', async (req: AuthRequest, res, next) => {
   }
 });
 
-router.delete('/:id', async (req: AuthRequest, res, next) => {
+router.delete('/:id', authMiddleware, async (req: AuthRequest, res, next) => {
   try {
     const userId = req.user!.userId;
     const { id } = req.params;
