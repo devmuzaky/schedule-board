@@ -35,7 +35,7 @@ const ASPECT_COLORS: Record<Aspect, string> = {
   imports: [CommonModule, CardModule, ProgressBarModule],
   template: `
     <div class="dashboard">
-      <h2>Moe Zaky's Weekly Summary</h2>
+      <h2>Weekly Summary</h2>
 
       <div class="stats-strip">
         <div class="stat-item">
@@ -44,48 +44,50 @@ const ASPECT_COLORS: Record<Aspect, string> = {
         </div>
         <div class="stat-item">
           <span class="stat-value">{{ tasksCompleted }}</span>
-          <span class="stat-label">My tasks completed</span>
+          <span class="stat-label">Tasks completed</span>
         </div>
         <div class="stat-item">
           <span class="stat-value">{{ totalPlannedHours | number:'1.0-0' }}h</span>
-          <span class="stat-label">My planned total</span>
+          <span class="stat-label">Planned total</span>
         </div>
       </div>
 
       @if (tasks.length === 0) {
         <div class="empty-state">
           <i class="pi pi-chart-line empty-state-icon"></i>
-          <p>No tasks yet. Add tasks on the Board to see my progress.</p>
+          <p>No tasks yet. Add tasks on the Board to see progress.</p>
         </div>
       } @else {
-        <div class="summary-cards">
-          @for (aspect of ASPECTS; track aspect) {
-            <p-card class="summary-card" [ngClass]="'aspect-' + aspect">
-              <ng-template pTemplate="header">
-                <div class="card-header">
-                  <h3>{{ aspect }}</h3>
-                  <p class="subtitle">{{ getStudied(aspect) }}/{{ ASPECT_PLANNED[aspect] }}h</p>
-                </div>
-              </ng-template>
-              <p-progressBar [value]="getProgress(aspect)" [showValue]="false"></p-progressBar>
-            </p-card>
-          }
-        </div>
-        <p-card class="chart-card">
-          <ng-template pTemplate="header">
-            <h3>My Progress by Aspect</h3>
-          </ng-template>
-          <div class="chart-container">
-            <canvas #chartCanvas></canvas>
+        <div class="summary-and-chart">
+          <div class="summary-cards">
+            @for (aspect of ASPECTS; track aspect) {
+              <p-card class="summary-card" [ngClass]="'aspect-' + aspect">
+                <ng-template pTemplate="header">
+                  <div class="card-header">
+                    <h3>{{ aspect }}</h3>
+                    <p class="subtitle">{{ getStudied(aspect) }}/{{ ASPECT_PLANNED[aspect] }}h</p>
+                  </div>
+                </ng-template>
+                <p-progressBar [value]="getProgress(aspect)" [showValue]="false"></p-progressBar>
+              </p-card>
+            }
           </div>
-        </p-card>
+          <p-card class="chart-card">
+            <ng-template pTemplate="header">
+              <h3>Progress by Aspect</h3>
+            </ng-template>
+            <div class="chart-container">
+              <canvas #chartCanvas></canvas>
+            </div>
+          </p-card>
+        </div>
       }
     </div>
   `,
   styles: [
     `
       .dashboard {
-        max-width: 900px;
+        max-width: 1000px;
       }
       .dashboard h2 {
         margin-bottom: 1.5rem;
@@ -118,11 +120,16 @@ const ASPECT_COLORS: Record<Aspect, string> = {
         font-size: 0.85rem;
         color: var(--app-text-secondary);
       }
+      .summary-and-chart {
+        display: grid;
+        grid-template-columns: minmax(0, 320px) 1fr;
+        gap: 1.5rem;
+        align-items: start;
+      }
       .summary-cards {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1.25rem;
-        margin-bottom: 2rem;
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
       }
       .summary-card {
         border-radius: var(--app-card-radius);
@@ -133,14 +140,14 @@ const ASPECT_COLORS: Record<Aspect, string> = {
       }
       .summary-card:hover {
         box-shadow: var(--app-card-shadow-hover);
-        transform: translateY(-2px);
+        transform: translateY(-1px);
       }
       .summary-card ::ng-deep .p-card-header {
-        padding: 1.25rem 1.5rem !important;
-        border-left: 4px solid transparent;
+        padding: 0.6rem 0.85rem !important;
+        border-left: 3px solid transparent;
       }
       .summary-card ::ng-deep .p-card-body {
-        padding: 1.25rem 1.5rem !important;
+        padding: 0.5rem 0.85rem 0.75rem !important;
       }
       .summary-card.aspect-English ::ng-deep .p-card-header { border-left-color: #1976d2; }
       .summary-card.aspect-FE ::ng-deep .p-card-header { border-left-color: #7b1fa2; }
@@ -149,20 +156,20 @@ const ASPECT_COLORS: Record<Aspect, string> = {
       .summary-card.aspect-Soft_skills ::ng-deep .p-card-header { border-left-color: #c2185b; }
       .summary-card.aspect-Reading ::ng-deep .p-card-header { border-left-color: #0097a7; }
       .summary-card ::ng-deep .p-progressbar {
-        height: 10px;
-        margin-top: 0.75rem;
-        border-radius: 5px;
+        height: 6px;
+        margin-top: 0.4rem;
+        border-radius: 4px;
       }
       .summary-card ::ng-deep .p-progressbar .p-progressbar-value {
         border-radius: 5px;
       }
       .card-header h3, .chart-card h3 {
-        margin: 0 0 0.25rem 0;
-        font-size: 1rem;
+        margin: 0 0 0.15rem 0;
+        font-size: 0.9rem;
       }
       .card-header .subtitle {
         margin: 0;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: var(--app-text-secondary);
       }
       .chart-card ::ng-deep .p-card-header {
@@ -216,16 +223,18 @@ const ASPECT_COLORS: Record<Aspect, string> = {
         .stat-value {
           font-size: 1.35rem;
         }
-        .summary-cards {
+        .summary-and-chart {
           grid-template-columns: 1fr;
-          gap: 1rem;
-          margin-bottom: 1.5rem;
+          gap: 1.25rem;
+        }
+        .summary-cards {
+          gap: 0.6rem;
         }
         .summary-card ::ng-deep .p-card-header {
-          padding: 1rem 1.25rem !important;
+          padding: 0.75rem 1rem !important;
         }
         .summary-card ::ng-deep .p-card-body {
-          padding: 1rem 1.25rem !important;
+          padding: 0.6rem 1rem 0.85rem !important;
         }
         .chart-card ::ng-deep .p-card-header,
         .chart-card ::ng-deep .p-card-body {

@@ -14,12 +14,12 @@ import { Router } from '@angular/router';
   imports: [CommonModule, CardModule, ButtonModule, RippleModule],
   template: `
     <div class="profile">
-      <h2>Moe Zaky's Progress History</h2>
+      <h2>Progress History</h2>
       <p-card>
         <ng-template pTemplate="header">
           <div class="card-header">
-            <h3>My Activity</h3>
-            <p class="subtitle">All my logged progress entries</p>
+            <h3>Activity Log</h3>
+            <p class="subtitle">All logged progress entries</p>
             @if (auth.isLoggedIn()) {
             <button pButton (click)="exportCsv()" [disabled]="exporting" [label]="exporting ? 'Exporting...' : 'Export to CSV'" icon="pi pi-download" class="export-btn"></button>
           }
@@ -58,25 +58,29 @@ import { Router } from '@angular/router';
   styles: [
     `
       .profile {
-        max-width: 800px;
+        max-width: 900px;
       }
       .profile h2 {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
         font-weight: 600;
         font-size: 1.5rem;
         color: var(--app-text);
+        letter-spacing: -0.02em;
       }
       .profile ::ng-deep .p-card {
         border-radius: var(--app-card-radius);
         border: var(--app-card-border);
         box-shadow: var(--app-card-shadow);
         transition: box-shadow 0.25s ease;
+        overflow: hidden;
       }
       .profile ::ng-deep .p-card:hover {
         box-shadow: var(--app-card-shadow-hover);
       }
       .profile ::ng-deep .p-card-header {
         padding: 1.25rem 1.5rem !important;
+        background: var(--app-surface-elevated);
+        border-bottom: 1px solid var(--app-border);
       }
       .profile ::ng-deep .p-card-body {
         padding: 1.25rem 1.5rem !important;
@@ -90,7 +94,9 @@ import { Router } from '@angular/router';
       }
       .card-header h3 {
         margin: 0 0 0.25rem 0;
-        font-size: 1rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--app-text);
       }
       .card-header .subtitle {
         margin: 0;
@@ -104,17 +110,22 @@ import { Router } from '@angular/router';
       .log-list {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.6rem;
       }
       .log-item {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
-        padding: 0.75rem 1rem;
+        padding: 0.9rem 1.15rem;
         background: var(--app-column-bg);
-        border-radius: var(--app-card-radius);
+        border-radius: 10px;
         border: 1px solid var(--app-border);
+        transition: border-color 0.2s, background 0.2s;
+      }
+      .log-item:hover {
+        background: var(--app-surface-elevated);
+        border-color: rgba(13, 159, 187, 0.2);
       }
       .log-main {
         display: flex;
@@ -125,18 +136,21 @@ import { Router } from '@angular/router';
         min-width: 0;
       }
       .log-date {
-        font-size: 0.85rem;
+        font-size: 0.82rem;
         color: var(--app-text-secondary);
         flex-shrink: 0;
+        font-variant-numeric: tabular-nums;
       }
       .log-aspect {
-        font-size: 0.8rem;
-        padding: 0.2rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.55rem;
         border-radius: 6px;
         background: var(--app-accent-bg);
         border: 1px solid var(--app-accent);
         color: var(--app-accent-text);
         flex-shrink: 0;
+        letter-spacing: 0.02em;
       }
       .log-task {
         font-weight: 500;
@@ -145,11 +159,13 @@ import { Router } from '@angular/router';
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-size: 0.95rem;
       }
       .log-hours {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--app-text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--app-accent-text);
+        flex-shrink: 0;
       }
       @media (max-width: 768px) {
         .profile {
