@@ -1,6 +1,8 @@
 # Fly.io config for schedule-board backend API
-# Deploy: fly deploy (from repo root)
-# Secrets: fly secrets set DATABASE_URL=... JWT_SECRET=...
+# 1. Complete billing: https://fly.io/dashboard/mohamed-zaky/billing
+# 2. fly postgres create --name schedule-board-db  (or use Neon.tech for free DB)
+# 3. fly secrets set DATABASE_URL="..." JWT_SECRET="$(openssl rand -base64 32)"
+# 4. fly deploy
 
 app = "schedule-board"
 
@@ -19,6 +21,7 @@ app = "schedule-board"
   min_machines_running = 0
   processes = ["app"]
 
+# Minimal VM for free tier (stays under ~$5/month)
 [[vm]]
   memory = "256mb"
   cpu_kind = "shared"

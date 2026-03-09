@@ -18,6 +18,8 @@ import {
   CreateTaskPayload,
 } from '../../shared/services/task.service';
 import { Task, Day, Aspect } from '../../shared/models/task.model';
+import { AuthService } from '../../core/auth/auth.service';
+import { Router } from '@angular/router';
 
 const DAYS: Day[] = [
   'Saturday',
@@ -105,7 +107,11 @@ function getTodayDay(): Day {
       @if (filteredTasks.length === 0) {
         <div class="empty-state">
           <i class="pi pi-inbox empty-state-icon"></i>
-          <p>No tasks yet. Click "Add Task" to create one.</p>
+          @if (auth.isLoggedIn()) {
+            <p>No tasks yet. Click "Add Task" to create one.</p>
+          } @else {
+            <p>Log in to add and manage your tasks.</p>
+          }
         </div>
       } @else {
         <div class="task-list">
@@ -574,6 +580,8 @@ export class ScheduleBoardComponent implements OnInit {
   private taskService = inject(TaskService);
   private confirmationService = inject(ConfirmationService);
   private fb = inject(FormBuilder);
+  auth = inject(AuthService);
+  private router = inject(Router);
 
   tasksByDay: Record<Day, Task[]> = {
     Monday: [],
@@ -622,11 +630,21 @@ export class ScheduleBoardComponent implements OnInit {
     const storedDay = localStorage.getItem(SELECTED_DAY_KEY);
     if (storedDay && DAYS.includes(storedDay as Day))
       this.selectedDay = storedDay as Day;
-    this.taskService.loadTasks().subscribe();
+    if (this.auth.isLoggedIn()) {
+      this.taskService.loadTasks().subscribe();
+    }
     this.taskService.tasks.subscribe((t) => {
       this.tasks = t;
       this.rebuildTasksByDay(t);
     });
+  }
+
+  private requireLogin(): boolean {
+    if (!this.auth.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+    return true;
   }
 
   private rebuildTasksByDay(tasks: Task[]) {
@@ -649,6 +667,7 @@ export class ScheduleBoardComponent implements OnInit {
   }
 
   confirmDayChange(task: Task, newDay: Day) {
+    if (!this.requireLogin()) return;
     const oldDay = task.day;
     if (newDay === oldDay) return;
     this.confirmationService.confirm({
@@ -670,6 +689,7 @@ export class ScheduleBoardComponent implements OnInit {
   }
 
   openAddDialog() {
+    if (!this.requireLogin()) return;
     this.addForm.reset({
       aspect: 'English',
       description: '',
@@ -700,6 +720,7 @@ export class ScheduleBoardComponent implements OnInit {
   }
 
   openEditDialog(task: Task) {
+    if (!this.requireLogin()) return;
     this.editingTask = task;
     this.editForm.patchValue({
       aspect: task.aspect,
@@ -733,6 +754,7 @@ export class ScheduleBoardComponent implements OnInit {
   }
 
   confirmDelete(task: Task) {
+    if (!this.requireLogin()) return;
     this.confirmationService.confirm({
       message: `Delete "${task.description}"?`,
       header: 'Delete Task',
@@ -745,6 +767,7 @@ export class ScheduleBoardComponent implements OnInit {
   }
 
   logProgress(task: Task) {
+    if (!this.requireLogin()) return;
     const hours = this.logHours[task.id];
     if (!hours || hours <= 0) return;
     this.logging[task.id] = true;
@@ -759,6 +782,7 @@ export class ScheduleBoardComponent implements OnInit {
   }
 
   resetWeek() {
+    if (!this.requireLogin()) return;
     this.resetting = true;
     this.taskService.weeklyReset().subscribe({
       next: () => {},

@@ -43,8 +43,12 @@ import { AuthService } from '../../core/auth/auth.service';
           </a>
         </nav>
         <div class="sidebar-footer">
-          <span class="username">{{ auth.getUsername() }}</span>
-          <button pButton pRipple icon="pi pi-sign-out" (click)="logout()" class="p-button-text p-button-rounded"></button>
+          @if (auth.isLoggedIn()) {
+            <span class="username">{{ auth.getUsername() }}</span>
+            <button pButton pRipple icon="pi pi-sign-out" (click)="logout()" class="p-button-text p-button-rounded"></button>
+          } @else {
+            <a pButton pRipple routerLink="/login" class="p-button-text p-button-sm">Login</a>
+          }
         </div>
       </aside>
       <div class="sidebar-overlay" (click)="sidebarOpen = false" [class.visible]="sidebarOpen"></div>

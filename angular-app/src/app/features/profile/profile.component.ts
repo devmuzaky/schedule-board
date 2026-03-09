@@ -5,6 +5,8 @@ import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { ConfirmationService } from 'primeng/api';
 import { TaskService, ProgressLogResponse } from '../../shared/services/task.service';
+import { AuthService } from '../../core/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -18,13 +20,19 @@ import { TaskService, ProgressLogResponse } from '../../shared/services/task.ser
           <div class="card-header">
             <h3>Your Activity</h3>
             <p class="subtitle">All logged progress entries</p>
+            @if (auth.isLoggedIn()) {
             <button pButton (click)="exportCsv()" [disabled]="exporting" [label]="exporting ? 'Exporting...' : 'Export to CSV'" icon="pi pi-download" class="export-btn"></button>
+          }
           </div>
         </ng-template>
         @if (logs.length === 0) {
           <div class="empty-state">
             <i class="pi pi-history empty-state-icon"></i>
-            <p>No progress logged yet.</p>
+            @if (auth.isLoggedIn()) {
+              <p>No progress logged yet.</p>
+            } @else {
+              <p>Log in to view your progress history.</p>
+            }
           </div>
         } @else {
           <div class="log-list">
@@ -189,17 +197,25 @@ import { TaskService, ProgressLogResponse } from '../../shared/services/task.ser
 export class ProfileComponent implements OnInit {
   private taskService = inject(TaskService);
   private confirmationService = inject(ConfirmationService);
+  auth = inject(AuthService);
+  private router = inject(Router);
   logs: ProgressLogResponse[] = [];
   exporting = false;
   deleting: Record<string, boolean> = {};
 
   ngOnInit() {
-    this.taskService.getProgressLogs().subscribe((logs) => {
-      this.logs = logs;
-    });
+    if (this.auth.isLoggedIn()) {
+      this.taskService.getProgressLogs().subscribe((logs) => {
+        this.logs = logs;
+      });
+    }
   }
 
   confirmDeleteLog(log: ProgressLogResponse) {
+    if (!this.auth.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
     this.confirmationService.confirm({
       message: `Remove this log? (${log.loggedHours}h for ${log.task.description})`,
       header: 'Remove Log',
@@ -220,6 +236,10 @@ export class ProfileComponent implements OnInit {
   }
 
   exportCsv() {
+    if (!this.auth.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
     this.exporting = true;
     this.taskService.exportCsv().subscribe({
       next: (blob) => {

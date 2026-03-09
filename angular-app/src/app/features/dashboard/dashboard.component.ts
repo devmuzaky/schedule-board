@@ -5,6 +5,7 @@ import { CardModule } from 'primeng/card';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TaskService } from '../../shared/services/task.service';
 import { Task, Aspect } from '../../shared/models/task.model';
+import { AuthService } from '../../core/auth/auth.service';
 
 Chart.register(...registerables);
 
@@ -54,7 +55,11 @@ const ASPECT_COLORS: Record<Aspect, string> = {
       @if (tasks.length === 0) {
         <div class="empty-state">
           <i class="pi pi-chart-line empty-state-icon"></i>
-          <p>No tasks yet. Add tasks on the Board to see your progress.</p>
+          @if (auth.isLoggedIn()) {
+            <p>No tasks yet. Add tasks on the Board to see your progress.</p>
+          } @else {
+            <p>Log in to view your weekly summary.</p>
+          }
         </div>
       } @else {
         <div class="summary-cards">
@@ -242,6 +247,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   readonly ASPECTS = ASPECTS;
   readonly ASPECT_PLANNED = ASPECT_PLANNED;
   private taskService = inject(TaskService);
+  auth = inject(AuthService);
   tasks: Task[] = [];
   private chart: Chart | null = null;
 
@@ -258,7 +264,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.taskService.loadTasks().subscribe();
+    if (this.auth.isLoggedIn()) {
+      this.taskService.loadTasks().subscribe();
+    }
     this.taskService.tasks.subscribe((t) => {
       this.tasks = t;
       this.updateChart();
