@@ -521,6 +521,7 @@ h6 {
   .task-card .task-hours {
     color: var(--app-text) !important;
   }
+  .task-card .log-form .log-input,
   .task-card .log-form input.p-inputnumber-input,
   .task-card input.p-inputnumber-input {
     background: var(--app-surface) !important;

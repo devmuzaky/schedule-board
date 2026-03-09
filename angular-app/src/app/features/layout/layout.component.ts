@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../../core/auth/auth.service';
-import { TaskService } from '../../shared/services/task.service';
 
 @Component({
   selector: 'app-layout',
@@ -60,17 +59,7 @@ import { TaskService } from '../../shared/services/task.service';
           </a>
         </nav>
         <div class="sidebar-footer">
-          @if (auth.isLoggedIn()) {
-            <span class="username">{{ auth.getUsername() }}</span>
-          } @else {
-            <a
-              pButton
-              pRipple
-              routerLink="/login"
-              class="p-button-text p-button-sm"
-              >Login</a
-            >
-          }
+          <span class="username">{{ auth.getUsername() || 'moezaky' }}</span>
         </div>
       </aside>
       <div
@@ -281,19 +270,9 @@ import { TaskService } from '../../shared/services/task.service';
 export class LayoutComponent {
   sidebarOpen = false;
 
-  constructor(
-    public auth: AuthService,
-    private taskService: TaskService,
-    private router: Router,
-  ) {}
+  constructor(public auth: AuthService) {}
 
   closeSidebarOnNav() {
     this.sidebarOpen = false;
-  }
-
-  logout() {
-    this.auth.logout();
-    this.taskService.clearTasks();
-    this.router.navigate(['/login']);
   }
 }

@@ -44,7 +44,7 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    return true; // Always logged in - no logout
   }
 
   get loggedIn() {

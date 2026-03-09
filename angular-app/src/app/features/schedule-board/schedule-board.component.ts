@@ -50,6 +50,7 @@ const DAY_ORDER: Day[] = [
   'Saturday',
 ];
 const SELECTED_DAY_KEY = 'schedule-board-selected-day';
+const LOG_SUGGESTIONS = [0.25, 0.5, 1, 1.5, 2];
 
 function getTodayDay(): Day {
   return DAY_ORDER[new Date().getDay()];
@@ -151,16 +152,28 @@ function getTodayDay(): Day {
                 <p-progressBar [value]="getProgressPercent(task)" [showValue]="false" styleClass="task-progress"></p-progressBar>
                 @if (auth.isLoggedIn()) {
                 <div class="log-form">
-                  <p-inputNumber
-                    [(ngModel)]="logHours[task.id]"
-                    [minFractionDigits]="2"
-                    [maxFractionDigits]="2"
-                    [min]="0"
-                    [step]="0.25"
+                  <input
+                    type="text"
+                    inputmode="decimal"
+                    [(ngModel)]="logInputValues[task.id]"
                     placeholder="Log"
-                    styleClass="log-input"
-                  ></p-inputNumber>
-                  <button pButton icon="pi pi-plus" (click)="logProgress(task)" [disabled]="!logHours[task.id] || logging[task.id]" class="p-button-rounded p-button-sm"></button>
+                    class="log-input"
+                    (keydown.enter)="logProgress(task)"
+                  />
+                  <div class="log-suggestions">
+                    @for (h of logSuggestions; track h) {
+                      <button
+                        type="button"
+                        pButton
+                        pRipple
+                        [label]="h.toString()"
+                        (click)="logProgress(task, h)"
+                        [disabled]="logging[task.id]"
+                        class="p-button-outlined p-button-sm log-suggestion-btn"
+                      ></button>
+                    }
+                  </div>
+                  <button pButton icon="pi pi-plus" (click)="logProgress(task)" [disabled]="!getLogHours(task) || logging[task.id]" class="p-button-rounded p-button-sm log-add-btn"></button>
                 </div>
                 }
               </div>
@@ -466,29 +479,43 @@ function getTodayDay(): Day {
         align-items: center;
         gap: 0.35rem;
         flex-shrink: 0;
+        flex-wrap: wrap;
       }
-      .log-form p-inputnumber {
-        width: 70px;
-      }
-      .log-form ::ng-deep .p-inputnumber {
-        width: 100%;
-      }
-      .log-form ::ng-deep .p-inputnumber-input {
-        width: 100%;
+      .log-form .log-input {
+        width: 64px;
         padding: 0.3rem 0.5rem;
         font-size: 0.85rem;
-        background: var(--app-surface) !important;
-        border: 1px solid var(--app-border) !important;
-        color: var(--app-text) !important;
+        background: var(--app-surface);
+        border: 1px solid var(--app-border);
+        color: var(--app-text);
         border-radius: 6px;
       }
-      .log-form ::ng-deep .p-inputnumber-input::placeholder {
+      .log-form .log-input::placeholder {
         color: var(--app-text-secondary);
       }
-      .log-form ::ng-deep .p-inputnumber-button {
-        background: var(--app-column-bg) !important;
-        border-color: var(--app-border) !important;
-        color: var(--app-text) !important;
+      .log-form .log-input:focus {
+        outline: none;
+        border-color: var(--app-accent);
+      }
+      .log-suggestions {
+        display: flex;
+        gap: 0.2rem;
+        flex-wrap: wrap;
+      }
+      .log-suggestion-btn {
+        min-width: 36px !important;
+        padding: 0.25rem 0.4rem !important;
+        font-size: 0.8rem !important;
+      }
+      .log-add-btn {
+        width: 28px !important;
+        min-width: 28px !important;
+        height: 28px !important;
+        min-height: 28px !important;
+        padding: 0 !important;
+      }
+      .log-add-btn .p-button-icon {
+        font-size: 0.75rem;
       }
       .field {
         margin-bottom: 1rem;
@@ -583,13 +610,25 @@ function getTodayDay(): Day {
           flex: 1 1 100%;
           min-width: 0;
           min-height: 44px;
+          gap: 0.5rem;
         }
-        .log-form p-inputnumber {
-          width: 90px;
+        .log-form .log-input {
+          width: 70px;
+          min-height: 40px;
         }
-        .log-form .p-button {
-          min-width: 44px;
-          min-height: 44px;
+        .log-form .log-add-btn {
+          width: 32px !important;
+          min-width: 32px !important;
+          height: 32px !important;
+          min-height: 32px !important;
+        }
+        .log-form .log-suggestion-btn {
+          min-width: 40px !important;
+          min-height: 40px !important;
+        }
+        .log-suggestion-btn {
+          min-width: 40px !important;
+          min-height: 40px !important;
         }
       }
       @media (max-width: 480px) {
@@ -635,7 +674,8 @@ export class ScheduleBoardComponent implements OnInit {
     Sunday: [],
   };
   tasks: Task[] = [];
-  logHours: Record<string, number> = {};
+  logInputValues: Record<string, string> = {};
+  logSuggestions = LOG_SUGGESTIONS;
   logging: Record<string, boolean> = {};
   resetting = false;
   adding = false;
@@ -806,14 +846,21 @@ export class ScheduleBoardComponent implements OnInit {
     });
   }
 
-  logProgress(task: Task) {
+  getLogHours(task: Task): number | null {
+    const raw = this.logInputValues[task.id];
+    if (raw == null || raw === '') return null;
+    const h = parseFloat(String(raw).trim());
+    return !isNaN(h) && h > 0 ? h : null;
+  }
+
+  logProgress(task: Task, hours?: number) {
     if (!this.requireLogin()) return;
-    const hours = this.logHours[task.id];
-    if (!hours || hours <= 0) return;
+    const h = hours ?? this.getLogHours(task);
+    if (h == null || h <= 0) return;
     this.logging[task.id] = true;
-    this.taskService.logProgress(task.id, hours).subscribe({
+    this.taskService.logProgress(task.id, h).subscribe({
       next: () => {
-        this.logHours[task.id] = 0;
+        this.logInputValues[task.id] = '';
       },
       complete: () => {
         this.logging[task.id] = false;
