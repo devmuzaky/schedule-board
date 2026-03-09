@@ -7,6 +7,8 @@ app = 'schedule-board'
 primary_region = 'iad'
 
 [build]
+  dockerfile = "Dockerfile"
+  [build.args]
 
 [http_service]
   internal_port = 3000
