@@ -1,8 +1,13 @@
 @if (loading$ | async) {
+  <div class="global-loader-overlay"></div>
   <div class="global-loader">
     <div class="loader-bar"></div>
   </div>
+  <div class="global-spinner">
+    <div class="spinner"></div>
+  </div>
 }
+<app-pin-dialog />
 <p-toast />
 <p-confirmDialog />
 <router-outlet />

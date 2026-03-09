@@ -19,6 +19,7 @@ import {
 } from '../../shared/services/task.service';
 import { Task, Day, Aspect } from '../../shared/models/task.model';
 import { AuthService } from '../../core/auth/auth.service';
+import { PinService } from '../../core/pin/pin.service';
 import { Router } from '@angular/router';
 
 const DAYS: Day[] = [
@@ -151,7 +152,7 @@ function getTodayDay(): Day {
                 <p class="task-description">{{ task.description }}</p>
                 <p-progressBar [value]="getProgressPercent(task)" [showValue]="false" styleClass="task-progress"></p-progressBar>
                 @if (auth.isLoggedIn()) {
-                <div class="log-form">
+                <div class="log-form" [class.log-form-loading]="logging[task.id]">
                   <input
                     type="text"
                     inputmode="decimal"
@@ -159,6 +160,7 @@ function getTodayDay(): Day {
                     placeholder="Log"
                     class="log-input"
                     (keydown.enter)="logProgress(task)"
+                    [disabled]="logging[task.id]"
                   />
                   <div class="log-suggestions">
                     @for (h of logSuggestions; track h) {
@@ -173,7 +175,7 @@ function getTodayDay(): Day {
                       ></button>
                     }
                   </div>
-                  <button pButton icon="pi pi-plus" (click)="logProgress(task)" [disabled]="!getLogHours(task) || logging[task.id]" class="p-button-rounded p-button-sm log-add-btn"></button>
+                  <button pButton [icon]="logging[task.id] ? 'pi pi-spin pi-spinner' : 'pi pi-plus'" (click)="logProgress(task)" [disabled]="!getLogHours(task) || logging[task.id]" class="p-button-rounded p-button-sm log-add-btn" [title]="logging[task.id] ? 'Logging...' : 'Add'"></button>
                 </div>
                 }
               </div>
@@ -507,6 +509,12 @@ function getTodayDay(): Day {
         padding: 0.25rem 0.4rem !important;
         font-size: 0.8rem !important;
       }
+      .log-form.log-form-loading {
+        opacity: 0.85;
+      }
+      .log-form.log-form-loading .log-suggestion-btn:disabled {
+        cursor: wait;
+      }
       .log-add-btn {
         width: 28px !important;
         min-width: 28px !important;
@@ -662,6 +670,7 @@ export class ScheduleBoardComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private fb = inject(FormBuilder);
   auth = inject(AuthService);
+  private pinService = inject(PinService);
   private router = inject(Router);
 
   tasksByDay: Record<Day, Task[]> = {
@@ -746,10 +755,12 @@ export class ScheduleBoardComponent implements OnInit {
     localStorage.setItem(SELECTED_DAY_KEY, this.selectedDay);
   }
 
-  confirmDayChange(task: Task, newDay: Day) {
+  async confirmDayChange(task: Task, newDay: Day) {
     if (!this.requireLogin()) return;
     const oldDay = task.day;
-    if (newDay === oldDay) return;
+    if (newDay === oldDay) return; // No change - skip PIN (avoids trigger on load)
+    const ok = await this.pinService.requestVerify();
+    if (!ok) return;
     this.confirmationService.confirm({
       message: `Move "${task.description}" from ${oldDay} to ${newDay}?`,
       header: 'Move Task',
@@ -799,8 +810,10 @@ export class ScheduleBoardComponent implements OnInit {
     });
   }
 
-  openEditDialog(task: Task) {
+  async openEditDialog(task: Task) {
     if (!this.requireLogin()) return;
+    const ok = await this.pinService.requestVerify();
+    if (!ok) return;
     this.editingTask = task;
     this.editForm.patchValue({
       aspect: task.aspect,
@@ -833,8 +846,10 @@ export class ScheduleBoardComponent implements OnInit {
       });
   }
 
-  confirmDelete(task: Task) {
+  async confirmDelete(task: Task) {
     if (!this.requireLogin()) return;
+    const ok = await this.pinService.requestVerify();
+    if (!ok) return;
     this.confirmationService.confirm({
       message: `Delete "${task.description}"?`,
       header: 'Delete Task',
@@ -868,8 +883,10 @@ export class ScheduleBoardComponent implements OnInit {
     });
   }
 
-  resetWeek() {
+  async resetWeek() {
     if (!this.requireLogin()) return;
+    const ok = await this.pinService.requestVerify();
+    if (!ok) return;
     this.resetting = true;
     this.taskService.weeklyReset().subscribe({
       next: () => {},

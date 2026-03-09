@@ -6,11 +6,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ThemeService } from './core/theme/theme.service';
 import { AuthService } from './core/auth/auth.service';
 import { LoadingService } from './core/loading/loading.service';
+import { PinDialogComponent } from './core/pin/pin-dialog.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ToastModule, ConfirmDialogModule, AsyncPipe],
+  imports: [RouterOutlet, ToastModule, ConfirmDialogModule, AsyncPipe, PinDialogComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

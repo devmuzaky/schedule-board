@@ -6,6 +6,7 @@ import { RippleModule } from 'primeng/ripple';
 import { ConfirmationService } from 'primeng/api';
 import { TaskService, ProgressLogResponse } from '../../shared/services/task.service';
 import { AuthService } from '../../core/auth/auth.service';
+import { PinService } from '../../core/pin/pin.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -227,6 +228,7 @@ export class ProfileComponent implements OnInit {
   private taskService = inject(TaskService);
   private confirmationService = inject(ConfirmationService);
   auth = inject(AuthService);
+  private pinService = inject(PinService);
   private router = inject(Router);
   logs: ProgressLogResponse[] = [];
   exporting = false;
@@ -238,11 +240,13 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  confirmDeleteLog(log: ProgressLogResponse) {
+  async confirmDeleteLog(log: ProgressLogResponse) {
     if (!this.auth.isLoggedIn()) {
       this.router.navigate(['/login']);
       return;
     }
+    const ok = await this.pinService.requestVerify();
+    if (!ok) return;
     this.confirmationService.confirm({
       message: `Remove this log? (${log.loggedHours}h for ${log.task.description})`,
       header: 'Remove Log',
@@ -262,7 +266,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  exportCsv() {
+  async exportCsv() {
     if (!this.auth.isLoggedIn()) {
       this.router.navigate(['/login']);
       return;
