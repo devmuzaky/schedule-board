@@ -1,0 +1,10 @@
+# Exclude from Docker build context
+angular-app/
+node-server/node_modules/
+node-server/dist/
+.git/
+.github/
+*.md
+render.yaml
+.env
+.env.*

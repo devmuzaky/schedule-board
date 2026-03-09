@@ -68,11 +68,13 @@ The Angular app runs at http://localhost:4200
 
 ## Deployment
 
-### Deploy Backend to Render (one-click)
+### Deploy Backend to Fly.io (no credit card)
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/devmuzaky/schedule-board)
-
-Click the button above, connect your GitHub, and Render will create the PostgreSQL database + API from `render.yaml`. The API will be at `https://schedule-board-api.onrender.com`.
+1. Install [Fly CLI](https://fly.io/docs/hands-on/install-flyctl/) and run `fly auth login`
+2. Create Postgres: `fly postgres create` (or use [Neon](https://neon.tech) for free DB)
+3. From repo root: `fly deploy`
+4. Set secrets: `fly secrets set DATABASE_URL="postgres://..." JWT_SECRET="your-secret"`
+5. API will be at `https://schedule-board.fly.dev/api`
 
 ### Push to GitHub
 
