@@ -68,6 +68,12 @@ The Angular app runs at http://localhost:4200
 
 ## Deployment
 
+### Deploy Backend to Render (one-click)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/devmuzaky/schedule-board)
+
+Click the button above, connect your GitHub, and Render will create the PostgreSQL database + API from `render.yaml`. The API will be at `https://schedule-board-api.onrender.com`.
+
 ### Push to GitHub
 
 ```bash

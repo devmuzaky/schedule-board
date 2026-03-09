@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://YOUR_RENDER_APP.onrender.com/api',
+  apiUrl: 'https://schedule-board-api.onrender.com/api',
 };
