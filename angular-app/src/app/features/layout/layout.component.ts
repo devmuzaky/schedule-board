@@ -9,12 +9,7 @@ import { TaskService } from '../../shared/services/task.service';
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    ButtonModule,
-    RippleModule,
-  ],
+  imports: [CommonModule, RouterModule, ButtonModule, RippleModule],
   template: `
     <div class="layout" [class.sidebar-open]="sidebarOpen">
       <aside class="sidebar">
@@ -30,15 +25,36 @@ import { TaskService } from '../../shared/services/task.service';
           ></button>
         </div>
         <nav class="sidebar-nav">
-          <a pButton pRipple routerLink="/board" routerLinkActive="active" class="p-button-text" (click)="closeSidebarOnNav()">
+          <a
+            pButton
+            pRipple
+            routerLink="/board"
+            routerLinkActive="active"
+            class="p-button-text"
+            (click)="closeSidebarOnNav()"
+          >
             <i class="pi pi-calendar"></i>
             <span>Board</span>
           </a>
-          <a pButton pRipple routerLink="/dashboard" routerLinkActive="active" class="p-button-text" (click)="closeSidebarOnNav()">
+          <a
+            pButton
+            pRipple
+            routerLink="/dashboard"
+            routerLinkActive="active"
+            class="p-button-text"
+            (click)="closeSidebarOnNav()"
+          >
             <i class="pi pi-chart-bar"></i>
             <span>Dashboard</span>
           </a>
-          <a pButton pRipple routerLink="/profile" routerLinkActive="active" class="p-button-text" (click)="closeSidebarOnNav()">
+          <a
+            pButton
+            pRipple
+            routerLink="/profile"
+            routerLinkActive="active"
+            class="p-button-text"
+            (click)="closeSidebarOnNav()"
+          >
             <i class="pi pi-user"></i>
             <span>Profile</span>
           </a>
@@ -46,13 +62,22 @@ import { TaskService } from '../../shared/services/task.service';
         <div class="sidebar-footer">
           @if (auth.isLoggedIn()) {
             <span class="username">{{ auth.getUsername() }}</span>
-            <button pButton pRipple icon="pi pi-sign-out" (click)="logout()" class="p-button-text p-button-rounded"></button>
           } @else {
-            <a pButton pRipple routerLink="/login" class="p-button-text p-button-sm">Login</a>
+            <a
+              pButton
+              pRipple
+              routerLink="/login"
+              class="p-button-text p-button-sm"
+              >Login</a
+            >
           }
         </div>
       </aside>
-      <div class="sidebar-overlay" (click)="sidebarOpen = false" [class.visible]="sidebarOpen"></div>
+      <div
+        class="sidebar-overlay"
+        (click)="sidebarOpen = false"
+        [class.visible]="sidebarOpen"
+      ></div>
       <div class="main">
         <button
           pButton
@@ -118,7 +143,9 @@ import { TaskService } from '../../shared/services/task.service';
         border-radius: 8px;
         color: var(--app-text);
         text-decoration: none;
-        transition: background 0.2s, color 0.2s;
+        transition:
+          background 0.2s,
+          color 0.2s;
       }
       .sidebar-nav a:hover {
         background: var(--app-column-bg);
@@ -257,7 +284,7 @@ export class LayoutComponent {
   constructor(
     public auth: AuthService,
     private taskService: TaskService,
-    private router: Router
+    private router: Router,
   ) {}
 
   closeSidebarOnNav() {
