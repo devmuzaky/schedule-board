@@ -29,7 +29,7 @@ import { AuthService } from '../../../core/auth/auth.service';
             <div class="logo-area">
               <i class="pi pi-calendar"></i>
             </div>
-            <h2>Schedule Board</h2>
+            <h2>Moe Zaky's Schedule</h2>
             <p class="subtitle">Sign in to manage your schedule</p>
             <p class="tagline">Track your weekly goals and progress in one place.</p>
           </div>

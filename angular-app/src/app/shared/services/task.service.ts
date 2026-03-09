@@ -30,6 +30,10 @@ export class TaskService {
     return this.tasks$.asObservable();
   }
 
+  clearTasks() {
+    this.tasks$.next([]);
+  }
+
   loadTasks() {
     return this.http.get<Task[]>(`${this.apiUrl}/tasks`).pipe(
       tap((tasks) => this.tasks$.next(tasks))

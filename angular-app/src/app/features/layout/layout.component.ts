@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../../core/auth/auth.service';
+import { TaskService } from '../../shared/services/task.service';
 
 @Component({
   selector: 'app-layout',
@@ -18,7 +19,7 @@ import { AuthService } from '../../core/auth/auth.service';
     <div class="layout" [class.sidebar-open]="sidebarOpen">
       <aside class="sidebar">
         <div class="sidebar-header">
-          <h1 class="app-title">Schedule Board</h1>
+          <h1 class="app-title">Moe Zaky's Schedule</h1>
           <button
             pButton
             pRipple
@@ -227,7 +228,11 @@ import { AuthService } from '../../core/auth/auth.service';
 export class LayoutComponent {
   sidebarOpen = false;
 
-  constructor(public auth: AuthService) {}
+  constructor(
+    public auth: AuthService,
+    private taskService: TaskService,
+    private router: Router
+  ) {}
 
   closeSidebarOnNav() {
     this.sidebarOpen = false;
@@ -235,6 +240,7 @@ export class LayoutComponent {
 
   logout() {
     this.auth.logout();
-    window.location.href = '/login';
+    this.taskService.clearTasks();
+    this.router.navigate(['/login']);
   }
 }

@@ -75,6 +75,7 @@ function getTodayDay(): Day {
   template: `
     <div class="board-header">
       <h2>Weekly Schedule</h2>
+      @if (auth.isLoggedIn()) {
       <div class="header-actions">
         <button
           pButton
@@ -89,6 +90,7 @@ function getTodayDay(): Day {
           [label]="resetting ? 'Resetting...' : 'Weekly Reset'"
         ></button>
       </div>
+      }
     </div>
 
     <div class="day-tabs">
@@ -125,6 +127,7 @@ function getTodayDay(): Day {
                   ></p-tag>
                   <span class="task-day-badge">{{ task.day }}</span>
                   <span class="task-hours">{{ task.studiedHours }}/{{ task.plannedHours }}h</span>
+                  @if (auth.isLoggedIn()) {
                   <p-dropdown
                     [options]="dayOptions"
                     [ngModel]="task.day"
@@ -134,15 +137,19 @@ function getTodayDay(): Day {
                     styleClass="p-inputtext-sm task-day-dropdown"
                     appendTo="body"
                   ></p-dropdown>
+                  }
                 </div>
+                @if (auth.isLoggedIn()) {
                 <div class="task-card-actions">
                   <button pButton icon="pi pi-pencil" pRipple (click)="openEditDialog(task)" class="p-button-text p-button-rounded p-button-sm"></button>
                   <button pButton icon="pi pi-trash" pRipple (click)="confirmDelete(task)" class="p-button-text p-button-danger p-button-rounded p-button-sm"></button>
                 </div>
+                }
               </div>
               <div class="task-card-row task-card-bottom">
                 <p class="task-description">{{ task.description }}</p>
                 <p-progressBar [value]="getProgressPercent(task)" [showValue]="false" styleClass="task-progress"></p-progressBar>
+                @if (auth.isLoggedIn()) {
                 <div class="log-form">
                   <p-inputNumber
                     [(ngModel)]="logHours[task.id]"
@@ -155,6 +162,7 @@ function getTodayDay(): Day {
                   ></p-inputNumber>
                   <button pButton icon="pi pi-plus" (click)="logProgress(task)" [disabled]="!logHours[task.id] || logging[task.id]" class="p-button-rounded p-button-sm"></button>
                 </div>
+                }
               </div>
             </div>
           }
